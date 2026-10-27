@@ -226,7 +226,9 @@ function requireEnv(env, mode, names) {
   if (missing.length) throw new Error(`STORAGE=${mode} needs these environment variables: ${missing.join(', ')}`);
 }
 
-function createBlobs(env, localDir) {
+function createBlobs(rawEnv, localDir) {
+  // values pasted into a hosting dashboard often carry a stray space or line break
+  const env = Object.fromEntries(Object.entries(rawEnv).map(([k, v]) => [k, typeof v === 'string' ? v.trim() : v]));
   const mode = (env.STORAGE || '').toLowerCase();
   const cache = {
     cacheDir: path.join(env.GP_TMP || os.tmpdir(), 'game-portal-cache'),
