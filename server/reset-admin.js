@@ -1,6 +1,6 @@
 'use strict';
 // Emergency admin password reset when the portal runs on your own PC:  node server/reset-admin.js <username>
-// (Uses the same storage settings as the server: local folder, or R2 when STORAGE=r2 and the R2_* variables are set.)
+// (Uses the same storage settings as the server: local folder, or the cloud bucket set by STORAGE=r2/s3 and its variables.)
 // Stop the portal first: a running portal keeps its own copy of the accounts and would overwrite this change.
 // On Render, use the ADMIN_RESET_USER / ADMIN_RESET_PASSWORD environment variables instead (see README).
 

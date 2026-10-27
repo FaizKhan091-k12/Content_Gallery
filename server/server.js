@@ -18,6 +18,8 @@ const { processBuild, CACHE_DIR } = require('./lib/webgl');
 
 // ---- configuration (environment variables; see README)
 //   STORAGE=r2 + R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY, R2_BUCKET  -> files in Cloudflare R2
+//   STORAGE=s3 + S3_ENDPOINT, S3_ACCESS_KEY_ID, S3_SECRET_ACCESS_KEY, S3_BUCKET    -> Backblaze B2 / any S3 service
+//   GP_CACHE_MB    disk cache for game files when using a bucket (default 1024, 0 = off)
 //   (default) local folder GP_STORAGE (data/ + games/ + thumbs/)
 //   TRUST_PROXY=1  behind a hosting proxy (Render): use its X-Forwarded-* headers
 //   SETUP_CODE     lets the first admin be created from any browser (needed on Render)
@@ -31,10 +33,10 @@ const SEED_DIR = path.join(__dirname, 'seed');
 const LOCAL_STORAGE = ENV.GP_STORAGE || path.join(ROOT, 'storage');
 const STAGING_DIR = path.join(ENV.GP_TMP || os.tmpdir(), 'game-portal-staging');
 fs.mkdirSync(STAGING_DIR, { recursive: true });
-// Copying a build from a folder on the server machine only makes sense when the portal runs on your own PC.
-const ALLOW_FOLDER_IMPORT = ENV.ALLOW_FOLDER_IMPORT ? ENV.ALLOW_FOLDER_IMPORT === '1' : !ON_RENDER && (ENV.STORAGE || '').toLowerCase() !== 'r2';
 
 const blobs = createBlobs(ENV, LOCAL_STORAGE);
+// Copying a build from a folder on the server machine only makes sense when the portal runs on your own PC.
+const ALLOW_FOLDER_IMPORT = ENV.ALLOW_FOLDER_IMPORT ? ENV.ALLOW_FOLDER_IMPORT === '1' : !ON_RENDER && blobs.kind === 'local';
 const store = new JsonStore(blobs);
 const auth = new Auth(store);
 const curriculum = () => loadCurriculum(store, SEED_DIR);
@@ -718,9 +720,9 @@ async function main() {
     if (Date.now() - fs.statSync(full).mtimeMs > 86400000) rmrf(full);
   }
 
-  if (blobs.kind === 'r2') {
+  if (blobs.check) {
     try { await blobs.check(); } catch (e) {
-      console.error(`Cannot reach the Cloudflare R2 bucket "${ENV.R2_BUCKET}": ${e.message}. Check the R2_* settings.`);
+      console.error(`Cannot reach the ${blobs.label}: ${e.message}. Check the ${ENV.STORAGE.toUpperCase()}_* settings.`);
       process.exit(1);
     }
   }

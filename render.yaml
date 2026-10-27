@@ -1,9 +1,10 @@
-# Render Blueprint: New > Blueprint > pick this repository. Fill in the four R2 values when Render asks.
+# Render Blueprint: New > Blueprint > paste this repository's URL. Fill in the four Backblaze B2 values when Render asks.
 services:
   - type: web
     name: game-portal
     runtime: node
     plan: free
+    region: singapore # the closest Render region to India
     buildCommand: echo "no build step (zero dependencies)"
     startCommand: node server/server.js
     healthCheckPath: /healthz
@@ -11,20 +12,21 @@ services:
       - key: NODE_VERSION
         value: "22"
       - key: STORAGE
-        value: r2
+        value: s3
       - key: TRUST_PROXY
         value: "1"
       # The only account that can be created at /setup: the portal owner, with full admin rights
       - key: ADMIN_USERNAME
         value: faiz.khan@k12onlineschools.com
-      # Cloudflare R2 (R2 > Manage API tokens > Create token with "Object Read & Write" on your bucket)
-      - key: R2_ACCOUNT_ID
+      # Backblaze B2 (free 10 GB, no card). The bucket page shows the Endpoint (s3.<region>.backblazeb2.com);
+      # Application Keys > Add a New Application Key gives the keyID and applicationKey.
+      - key: S3_ENDPOINT
         sync: false
-      - key: R2_ACCESS_KEY_ID
+      - key: S3_BUCKET
         sync: false
-      - key: R2_SECRET_ACCESS_KEY
+      - key: S3_ACCESS_KEY_ID
         sync: false
-      - key: R2_BUCKET
+      - key: S3_SECRET_ACCESS_KEY
         sync: false
       # One-time code for creating the first admin at /setup. Render generates it; copy it from
       # Environment in the Render dashboard. After the admin exists the setup page is closed for good.

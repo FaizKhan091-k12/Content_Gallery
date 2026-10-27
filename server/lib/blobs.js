@@ -1,11 +1,14 @@
 'use strict';
 // Where the portal keeps its files: uploaded builds, cover images and the JSON data (accounts, catalogue...).
-//   LocalBlobs - a folder on this computer (development, or running the portal on a PC)
-//   R2Blobs    - a Cloudflare R2 bucket (Render and other hosts with a temporary disk)
+//   LocalBlobs  - a folder on this computer (development, or running the portal on a PC)
+//   BucketBlobs - a cloud bucket: Cloudflare R2, Backblaze B2 or any S3-compatible service
+//                 (Render and other hosts with a temporary disk)
 
 const fs = require('fs');
+const os = require('os');
 const path = require('path');
-const { Readable } = require('stream');
+const crypto = require('crypto');
+const { Readable, Transform } = require('stream');
 const { S3Client } = require('./s3');
 
 function walk(dir, base = dir, out = []) {
@@ -74,10 +77,94 @@ class LocalBlobs {
   }
 }
 
-class R2Blobs {
-  constructor({ accountId, accessKeyId, secretAccessKey, bucket, endpoint }) {
-    this.s3 = new S3Client({ endpoint: endpoint || `https://${accountId}.r2.cloudflarestorage.com`, bucket, accessKeyId, secretAccessKey });
-    this.kind = 'r2';
+/**
+ * Copies of game files on the server's own (temporary) disk, so each file is downloaded from the bucket
+ * once per server start instead of once per player. Builds and covers are stored under versioned names,
+ * so a cached copy never goes stale. The least recently used files go first when the cache is full.
+ */
+class DiskCache {
+  constructor(dir, maxBytes) {
+    this.dir = dir;
+    this.max = maxBytes;
+    this.sizes = new Map(); // key -> bytes, least recently used first
+    this.total = 0;
+    this.seq = 0;
+    fs.rmSync(dir, { recursive: true, force: true });
+    fs.mkdirSync(dir, { recursive: true });
+  }
+
+  file(key) {
+    return path.join(this.dir, crypto.createHash('sha1').update(key).digest('hex'));
+  }
+
+  get(key) {
+    const size = this.sizes.get(key);
+    if (size === undefined) return null;
+    this.sizes.delete(key);
+    this.sizes.set(key, size);
+    return { stream: fs.createReadStream(this.file(key)), size };
+  }
+
+  /** Passes the bucket download through unchanged and keeps a copy if it arrives complete. */
+  fill(key, source, size) {
+    if (!size || size > this.max / 4) return source;
+    const tmp = `${this.file(key)}.${++this.seq}.part`;
+    const out = fs.createWriteStream(tmp);
+    let bytes = 0;
+    let failed = false;
+    out.on('error', () => { failed = true; });
+    const tee = new Transform({
+      transform(chunk, _enc, done) {
+        bytes += chunk.length;
+        if (!failed) out.write(chunk);
+        done(null, chunk);
+      },
+      flush: (done) => {
+        out.end(() => {
+          if (!failed && bytes === size) this.add(key, tmp, size);
+          else fs.rm(tmp, { force: true }, () => {});
+        });
+        done();
+      },
+    });
+    // the player went away mid-download: drop the partial copy
+    tee.on('close', () => {
+      if (!tee.writableFinished) { out.destroy(); fs.rm(tmp, { force: true }, () => {}); }
+    });
+    source.on('error', (e) => tee.destroy(e));
+    return source.pipe(tee);
+  }
+
+  add(key, tmp, size) {
+    try { fs.renameSync(tmp, this.file(key)); } catch { fs.rm(tmp, { force: true }, () => {}); return; }
+    if (!this.sizes.has(key)) this.total += size;
+    this.sizes.delete(key);
+    this.sizes.set(key, size);
+    for (const [k, n] of this.sizes) {
+      if (this.total <= this.max) break;
+      this.drop(k, n);
+    }
+  }
+
+  drop(key, size = this.sizes.get(key)) {
+    if (size === undefined) return;
+    this.sizes.delete(key);
+    this.total -= size;
+    fs.rm(this.file(key), { force: true }, () => {});
+  }
+
+  dropPrefix(prefix) {
+    for (const k of [...this.sizes.keys()]) if (k.startsWith(prefix)) this.drop(k);
+  }
+}
+
+class BucketBlobs {
+  /** label is only for messages, e.g. 'Cloudflare R2'. cacheDir/cacheBytes: see DiskCache (0 bytes = no cache). */
+  constructor({ endpoint, region, bucket, accessKeyId, secretAccessKey, label, cacheDir, cacheBytes }) {
+    this.s3 = new S3Client({ endpoint, region, bucket, accessKeyId, secretAccessKey });
+    this.kind = 'bucket';
+    this.label = `${label} bucket "${bucket}"`;
+    this.cache = cacheBytes > 0 ? new DiskCache(cacheDir, cacheBytes) : null;
   }
 
   async readJson(key) {
@@ -108,16 +195,23 @@ class R2Blobs {
   }
 
   async open(key) {
+    const cached = this.cache && this.cache.get(key);
+    if (cached) return cached;
     const res = await this.s3.get(key);
     if (!res) return null;
-    return { stream: Readable.fromWeb(res.body), size: parseInt(res.headers.get('content-length') || '0', 10) || undefined };
+    const size = parseInt(res.headers.get('content-length') || '0', 10) || undefined;
+    const stream = Readable.fromWeb(res.body);
+    return { stream: this.cache ? this.cache.fill(key, stream, size) : stream, size };
   }
 
   async deletePrefix(prefix) {
-    await this.s3.deletePrefix(prefix.endsWith('/') ? prefix : prefix + '/');
+    const dir = prefix.endsWith('/') ? prefix : prefix + '/';
+    if (this.cache) this.cache.dropPrefix(dir);
+    await this.s3.deletePrefix(dir);
   }
 
   async remove(key) {
+    if (this.cache) this.cache.drop(key);
     await this.s3.delete(key);
   }
 
@@ -127,14 +221,35 @@ class R2Blobs {
   }
 }
 
+function requireEnv(env, mode, names) {
+  const missing = names.filter((k) => !env[k]);
+  if (missing.length) throw new Error(`STORAGE=${mode} needs these environment variables: ${missing.join(', ')}`);
+}
+
 function createBlobs(env, localDir) {
-  if ((env.STORAGE || '').toLowerCase() === 'r2') {
-    const need = ['R2_ACCOUNT_ID', 'R2_ACCESS_KEY_ID', 'R2_SECRET_ACCESS_KEY', 'R2_BUCKET'];
-    const missing = need.filter((k) => !env[k]);
-    if (missing.length) throw new Error(`STORAGE=r2 needs these environment variables: ${missing.join(', ')}`);
-    return new R2Blobs({ accountId: env.R2_ACCOUNT_ID, accessKeyId: env.R2_ACCESS_KEY_ID, secretAccessKey: env.R2_SECRET_ACCESS_KEY, bucket: env.R2_BUCKET, endpoint: env.R2_ENDPOINT });
+  const mode = (env.STORAGE || '').toLowerCase();
+  const cache = {
+    cacheDir: path.join(env.GP_TMP || os.tmpdir(), 'game-portal-cache'),
+    cacheBytes: (env.GP_CACHE_MB !== undefined ? Number(env.GP_CACHE_MB) : 1024) * 1024 * 1024,
+  };
+  if (mode === 'r2') {
+    requireEnv(env, mode, ['R2_ACCOUNT_ID', 'R2_ACCESS_KEY_ID', 'R2_SECRET_ACCESS_KEY', 'R2_BUCKET']);
+    return new BucketBlobs({
+      endpoint: env.R2_ENDPOINT || `https://${env.R2_ACCOUNT_ID}.r2.cloudflarestorage.com`, region: 'auto', label: 'Cloudflare R2',
+      bucket: env.R2_BUCKET, accessKeyId: env.R2_ACCESS_KEY_ID, secretAccessKey: env.R2_SECRET_ACCESS_KEY, ...cache,
+    });
+  }
+  if (mode === 's3') {
+    requireEnv(env, mode, ['S3_ENDPOINT', 'S3_ACCESS_KEY_ID', 'S3_SECRET_ACCESS_KEY', 'S3_BUCKET']);
+    const endpoint = /^https?:\/\//.test(env.S3_ENDPOINT) ? env.S3_ENDPOINT : `https://${env.S3_ENDPOINT}`;
+    // Backblaze B2 and AWS endpoints name their region: https://s3.us-east-005.backblazeb2.com
+    const region = env.S3_REGION || (/^https?:\/\/s3[.-]([a-z0-9-]+)\./.exec(endpoint) || [])[1] || 'us-east-1';
+    return new BucketBlobs({
+      endpoint, region, label: 'storage',
+      bucket: env.S3_BUCKET, accessKeyId: env.S3_ACCESS_KEY_ID, secretAccessKey: env.S3_SECRET_ACCESS_KEY, ...cache,
+    });
   }
   return new LocalBlobs(localDir);
 }
 
-module.exports = { createBlobs, LocalBlobs, R2Blobs, walk };
+module.exports = { createBlobs, LocalBlobs, BucketBlobs, walk };

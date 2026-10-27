@@ -63,7 +63,7 @@ class S3Client {
     if (!okStatuses.includes(res.status)) {
       const text = await res.text().catch(() => '');
       const code = (text.match(/<Code>([^<]+)<\/Code>/) || [])[1];
-      const err = new Error(`R2 ${method} ${key}: ${res.status}${code ? ' ' + code : ''}`);
+      const err = new Error(`Storage ${method} ${key}: ${res.status}${code ? ' ' + code : ''}`);
       err.status = res.status;
       err.code = code;
       throw err;
