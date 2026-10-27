@@ -7,8 +7,9 @@
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..600&family=Inter:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:ital,wght@0,400;0,600;0,700;0,800;1,600&display=swap">
   <link rel="stylesheet" href="/assets/style.css">
+  <script src="/assets/theme.js"></script>
 </head>
 <body>
   <header class="topbar">
@@ -16,6 +17,8 @@
     <nav class="navlinks" id="nav"></nav>
     <label class="search"><span class="sr-only">Search</span><span id="search-icon"></span>
       <input class="input" id="q" type="search" placeholder="Search lessons, chapters, resources" autocomplete="off"></label>
+    <button class="icon-btn theme-toggle" id="theme" type="button"></button>
+    <div class="bell-wrap" id="bell"></div>
     <div id="user"></div>
   </header>
   <nav class="subnav" id="subnav"></nav>

@@ -207,6 +207,7 @@ function canSee(user, item) {
 function publicItem(item, user) {
   const out = { ...item };
   if (!user || user.role !== 'admin') { delete out.processLog; delete out.error; delete out.createdBy; }
+  out.publishedAt = item.publishedAt || (item.version ? item.updatedAt : null);
   out.thumbUrl = item.thumb ? `/t/${item.id}?v=${encodeURIComponent(item.updatedAt)}` : null;
   out.playUrl = item.entry ? `/g/${item.id}/${item.version}/${item.entry.split('/').map(encodeURIComponent).join('/')}` : null;
   return out;
@@ -293,6 +294,7 @@ async function finalizeBuild(item, stageDir, user) {
     Object.assign(item, {
       status: 'ready', version, entry: result.entry, isUnity: result.isUnity, gz: result.gz, size: result.size, files: result.files,
       processLog: result.log, updatedAt: new Date().toISOString(),
+      publishedAt: item.publishedAt || new Date().toISOString(), // first time it went live: drives the "new" alerts
     });
     saveItem(item);
     if (oldVersion) blobs.deletePrefix(gamePrefix(item.id, oldVersion)).catch((e) => console.error('cleanup failed:', e.message));
@@ -471,7 +473,16 @@ async function api(req, res, p, url, user, token) {
     activity(user, 'logout');
     return json(200, { ok: true });
   }
-  if (p === '/api/me' && method === 'GET') return json(200, { user: publicUser(user), site: { ...settings(), canImportFolder: ALLOW_FOLDER_IMPORT, storage: blobs.kind } });
+  if (p === '/api/me' && method === 'GET') {
+    return json(200, { user: publicUser(user), lastSeenNew: store.get('seen', {})[user.id] || null,
+      site: { ...settings(), canImportFolder: ALLOW_FOLDER_IMPORT, storage: blobs.kind } });
+  }
+  // "what's new" was looked at: resources published before now are no longer new for this person
+  if (p === '/api/me/seen' && method === 'POST') {
+    const at = new Date().toISOString();
+    store.update('seen', {}, (m) => { m[user.id] = at; });
+    return json(200, { lastSeenNew: at });
+  }
   if (p === '/api/me/password' && method === 'POST') {
     const b = await readJson(req);
     try { auth.login(user.username, b.current, clientIp(req)); } catch (e) { throw httpError(e.status === 429 ? 429 : 400, e.status === 429 ? e.message : 'Current password is wrong.'); }
@@ -745,7 +756,7 @@ async function main() {
       process.exit(1);
     }
   }
-  await store.init(['users', 'sessions', 'items', 'curriculum', 'settings', 'activity']);
+  await store.init(['users', 'sessions', 'items', 'curriculum', 'settings', 'activity', 'seen']);
   curriculum(); // seeds the books on first run
 
   // Forgotten admin password on a host without a terminal (Render free): set ADMIN_RESET_USER and

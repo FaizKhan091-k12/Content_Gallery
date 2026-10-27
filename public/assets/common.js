@@ -65,18 +65,21 @@ const GP = (() => {
     right: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>',
     shuffle: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h3.5c4.5 0 6.5 10 11 10H21M3 17h3.5c1.8 0 3-1.5 4.2-3.3M13.3 10.3C14.5 8.5 15.7 7 17.5 7H21M18 4l3 3-3 3M18 14l3 3-3 3"/></svg>',
     check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
+    sun: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"/></svg>',
+    moon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z"/></svg>',
+    bell: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 16V11a6 6 0 1 1 12 0v5l1.5 2h-15z"/><path d="M10 20.5a2.2 2.2 0 0 0 4 0"/></svg>',
     users: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18 20a6.5 6.5 0 0 0-3-5.5"/></svg>',
   };
 
   // The kinds of resources, in the order the library shows them.
   const TYPE_INFO = {
-    Book: { plural: 'Books', verb: 'Read', icon: 'bookOpen', color: '#8a5a2e', blurb: 'The textbook itself, page by page, with real page turns.' },
-    Flashcards: { plural: 'Flashcards', verb: 'Study', icon: 'cards', color: '#b4532a', blurb: 'Quick recall of key words, facts and formulas.' },
-    '2D Interactivity': { plural: '2D Interactivities', verb: 'Try it', icon: 'hand', color: '#5b3fa6', blurb: 'Hands-on activities that explain one idea at a time.' },
-    '3D Interactivity': { plural: '3D Interactivities', verb: 'Explore', icon: 'cube', color: '#3d4fb0', blurb: 'Models you can turn, take apart and look inside.' },
-    Simulation: { plural: 'Simulations', verb: 'Explore', icon: 'flask', color: '#17766c', blurb: 'Change the variables and watch the idea play out.' },
-    Game: { plural: 'Games', verb: 'Play', icon: 'game', color: '#2453a6', blurb: 'Practice through play, with instant feedback.' },
-    Animation: { plural: 'Animations', verb: 'Watch', icon: 'film', color: '#a3365f', blurb: 'Short animated explanations of a concept.' },
+    Book: { plural: 'Books', verb: 'Read', icon: 'bookOpen', color: '#f08c00', blurb: 'The textbook itself, page by page, with real page turns.' },
+    Flashcards: { plural: 'Flashcards', verb: 'Study', icon: 'cards', color: '#e64980', blurb: 'Quick recall of key words, facts and formulas.' },
+    '2D Interactivity': { plural: '2D Interactivities', verb: 'Try it', icon: 'hand', color: '#7950f2', blurb: 'Hands-on activities that explain one idea at a time.' },
+    '3D Interactivity': { plural: '3D Interactivities', verb: 'Explore', icon: 'cube', color: '#4263eb', blurb: 'Models you can turn, take apart and look inside.' },
+    Simulation: { plural: 'Simulations', verb: 'Explore', icon: 'flask', color: '#0ca678', blurb: 'Change the variables and watch the idea play out.' },
+    Game: { plural: 'Games', verb: 'Play', icon: 'game', color: '#1c7ed6', blurb: 'Practice through play, with instant feedback.' },
+    Animation: { plural: 'Animations', verb: 'Watch', icon: 'film', color: '#d6336c', blurb: 'Short animated explanations of a concept.' },
   };
   const TYPES = Object.keys(TYPE_INFO);
   const LEGACY_TYPE = { Interactive: '2D Interactivity', Other: '2D Interactivity' };
@@ -89,11 +92,11 @@ const GP = (() => {
 
   // Library colours and blurbs per subject (the book data only stores names).
   const SUBJECT_STYLE = {
-    Mathematics: { color: '#2b4c9b', glyph: '∑', blurb: 'Numbers, patterns, shapes and data, built up lesson by lesson from counting to algebra.' },
-    Science: { color: '#2f7a4f', icon: 'flask', blurb: 'Living things, matter, energy and the Earth, explored through simulations and hands-on activities.' },
-    Hindi: { color: '#c0601d', glyph: 'अ', blurb: 'कहानियाँ, कविताएँ और व्याकरण: reading, writing and grammar for every grade.' },
-    English: { color: '#7b3f8c', glyph: 'Aa', blurb: 'Reading, writing, speaking and listening.' },
-    'Global Perspectives': { color: '#1f7389', glyph: 'GP', blurb: 'Research, collaboration and reflection on the world around us.' },
+    Mathematics: { color: '#3b6cf6', glyph: '∑', blurb: 'Numbers, patterns, shapes and data, built up lesson by lesson from counting to algebra.' },
+    Science: { color: '#12a26b', icon: 'flask', blurb: 'Living things, matter, energy and the Earth, explored through simulations and hands-on activities.' },
+    Hindi: { color: '#f76707', glyph: 'अ', blurb: 'कहानियाँ, कविताएँ और व्याकरण: reading, writing and grammar for every grade.' },
+    English: { color: '#ae3ec9', glyph: 'Aa', blurb: 'Reading, writing, speaking and listening.' },
+    'Global Perspectives': { color: '#1098ad', glyph: 'GP', blurb: 'Research, collaboration and reflection on the world around us.' },
   };
   const subjectStyle = (name) => SUBJECT_STYLE[name] || { color: (subjects.find((s) => s.name === name) || {}).color || '#5f6c7b', glyph: String(name || '?')[0], blurb: '' };
 
@@ -229,5 +232,35 @@ const GP = (() => {
     return parts.join(' · ');
   }
 
-  return { api, esc, ICONS, TYPE_ICON, TYPE_INFO, TYPES, MAIN_TYPES, typeOf, typeInfo, typeIcon, subjectStyle, setSubjects, subjectColor, subjectShort, art, thumb, toast, bytes, when, dialog, userMenu, lessonLabel, changePassword };
+  // ---- "new" resources: published in the last two weeks (for badges) or since the person last checked (for alerts)
+  const NEW_DAYS = 14;
+  const publishedOf = (item) => Date.parse(item.publishedAt || item.updatedAt || item.createdAt || 0) || 0;
+  const isRecent = (item) => Date.now() - publishedOf(item) < NEW_DAYS * 86400000;
+
+  /** Sun/moon button that switches the light and night themes and remembers the choice in this browser. */
+  function themeToggle(btn) {
+    const paint = () => {
+      const dark = document.documentElement.dataset.theme === 'dark';
+      btn.innerHTML = dark ? ICONS.sun : ICONS.moon;
+      btn.title = dark ? 'Switch to the light theme' : 'Switch to the night theme';
+      btn.setAttribute('aria-label', btn.title);
+    };
+    btn.addEventListener('click', () => {
+      const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+      document.documentElement.classList.add('theme-anim');
+      document.documentElement.dataset.theme = next;
+      try { localStorage.setItem('gp-theme', next); } catch { /* storage blocked */ }
+      btn.classList.remove('spin');
+      void btn.offsetWidth;
+      btn.classList.add('spin');
+      paint();
+      setTimeout(() => document.documentElement.classList.remove('theme-anim'), 500);
+    });
+    paint();
+  }
+
+  return { api, esc, ICONS, NEW_DAYS, publishedOf, isRecent, themeToggle, TYPE_ICON, TYPE_INFO, TYPES, MAIN_TYPES, typeOf, typeInfo, typeIcon, subjectStyle, setSubjects, subjectColor, subjectShort, art, thumb, toast, bytes, when, dialog, userMenu, lessonLabel, changePassword };
 })();
+
+// every page with a #theme button gets the light/night switch
+(() => { const b = document.getElementById('theme'); if (b) GP.themeToggle(b); })();

@@ -8,6 +8,7 @@
 (async () => {
   const $ = (id) => document.getElementById(id);
   const { esc, ICONS } = GP;
+  history.scrollRestoration = 'manual'; // every page starts at the top; the browser would restore an old position
 
   $('search-icon').innerHTML = ICONS.search;
   const [me, cur, cat] = await Promise.all([GP.api('/api/me'), GP.api('/api/curriculum'), GP.api('/api/catalog')]);
@@ -40,6 +41,14 @@
   const unitLabel = (l) => (l.unit === 99 ? 'Grammar · व्याकरण' : `${l.strand ? l.strand + ' · ' : ''}Unit ${l.unit}`);
   const typesPresent = () => GP.TYPES.filter((t) => GP.MAIN_TYPES.includes(t) || items.some((i) => i.type === t));
 
+  // "new": published since this person last opened the bell (or in the last two weeks if they never have)
+  let seenAt = me.lastSeenNew ? Date.parse(me.lastSeenNew) : Date.now() - GP.NEW_DAYS * 86400000;
+  const live = items.filter((i) => i.status === 'ready' && i.visible !== false);
+  const byNewest = (a, b) => GP.publishedOf(b) - GP.publishedOf(a);
+  const isUnseen = (i) => GP.publishedOf(i) > seenAt;
+  const unseen = () => live.filter(isUnseen).sort(byNewest);
+  const recentCount = (list) => list.filter(GP.isRecent).length;
+
   // ---------------------------------------------------------------- links
   const enc = encodeURIComponent;
   const hSubject = (s) => `#/s/${enc(s)}`;
@@ -57,8 +66,8 @@
 
   function resCard(i, { showPlace = true } = {}) {
     const t = GP.typeInfo(i.type);
-    return `<a class="res-card fade-in" href="${hItem(i)}" style="--tc:${t.color}">
-      <div class="thumb">${GP.thumb(i)}<span class="go">${esc(t.verb)} ${ICONS.arrow}</span>${flag(i)}</div>
+    return `<a class="res-card ${isUnseen(i) ? 'unseen' : ''}" href="${hItem(i)}" style="--tc:${t.color}">
+      <div class="thumb">${GP.thumb(i)}${GP.isRecent(i) ? '<span class="ribbon">NEW</span>' : ''}<span class="go">${esc(t.verb)} ${ICONS.arrow}</span>${flag(i)}</div>
       <div class="body">
         <span class="kind">${GP.typeIcon(i.type)}${esc(i.type)}</span>
         <div class="title">${esc(i.title)}</div>
@@ -70,7 +79,7 @@
   function pill(i) {
     const t = GP.typeInfo(i.type);
     return `<a class="pill" href="${hItem(i)}" style="--tc:${t.color}" title="${esc(t.verb + ': ' + i.title)}">
-      <span class="i">${GP.typeIcon(i.type)}</span><span class="t">${esc(i.title)}</span><span class="k">${esc(i.type)}</span>${isAdmin && (!i.visible || i.status !== 'ready') ? '<span class="badge warn">hidden</span>' : ''}</a>`;
+      <span class="i">${GP.typeIcon(i.type)}</span><span class="t">${esc(i.title)}</span>${GP.isRecent(i) ? '<span class="newtag">NEW</span>' : '<span class="k">' + esc(i.type) + '</span>'}${isAdmin && (!i.visible || i.status !== 'ready') ? '<span class="badge warn">hidden</span>' : ''}</a>`;
   }
 
   const crumbs = (parts) => `<nav class="crumbs">${parts.map(([label, href], n) =>
@@ -88,48 +97,62 @@
       const g = gradesOf(s.name);
       const grade = g[Math.min(g.length - 1, [2, 5, 1][n] || 0)] || '';
       const c = GP.subjectColor(s.name);
-      return `<div class="stack s${n + 1}" style="background:linear-gradient(160deg, ${c}, color-mix(in srgb, ${c} 45%, #10131c))"><small>${esc(s.name)}</small><b>Grade ${esc(grade)}</b></div>`;
+      return `<div class="stack s${n + 1}" style="background:linear-gradient(160deg, ${c}, color-mix(in srgb, ${c} 55%, #262a5c))"><small>${esc(s.name)}</small><b>Grade ${esc(grade)}</b></div>`;
     }).join('');
-    const recent = [...items].sort((a, b) => String(b.updatedAt).localeCompare(String(a.updatedAt))).slice(0, 8);
+    const fresh = live.filter(GP.isRecent).sort(byNewest);
+    const recent = (fresh.length >= 4 ? fresh : [...live].sort(byNewest)).slice(0, 8);
+    const news = unseen();
+    const doodles = [['+', '#4c5fd5', 6, 12], ['×', '#ff8a1f', 44, 4], ['÷', '#20c997', 80, 20], ['★', '#ffc93c', 92, 70], ['π', '#ff6b9d', 58, 88],
+      ['अ', '#f76707', 22, 78], ['?', '#7950f2', 36, 46], ['=', '#1c7ed6', 70, 52], ['●', '#20c997', 12, 92], ['▲', '#ff6b9d', 96, 30]]
+      .map(([ch, c, x, y], n) => `<span style="left:${x}%;top:${y}%;--c:${c};--s:${22 + (n % 3) * 9}px;--t:${7 + n % 5}s;--dl:-${n * 0.7}s">${ch}</span>`).join('');
 
     return `
-      <section class="hero fade-in">
+      ${news.length ? `<section class="new-banner" id="new-banner">
+        ${[[8, 20], [30, 70], [62, 18], [84, 64], [94, 26]].map(([x, y], n) => `<i class="sparkle" style="left:${x}%;top:${y}%;animation-delay:${n * 0.4}s"></i>`).join('')}
+        <span class="party" aria-hidden="true">🎉</span>
+        <div><h2>${plural(news.length, 'new resource')} since your last visit!</h2>
+          <p>Fresh ${[...new Set(news.map((i) => GP.TYPE_INFO[i.type].plural))].slice(0, 3).join(', ')} have just been added. Take a look:</p>
+          <div class="chips-new">${news.slice(0, 6).map((i, n) => `<a href="${hItem(i)}" style="--tc:${GP.typeInfo(i.type).color};animation-delay:${0.3 + n * 0.08}s"><span>${GP.typeIcon(i.type)}</span>${esc(i.title)}</a>`).join('')}</div></div>
+        <button class="btn" type="button" data-seen>Got it 👍</button>
+      </section>` : ''}
+      <section class="hero">
+        <div class="doodles" aria-hidden="true">${doodles}</div>
         <div>
           <div class="eyebrow">${esc(site.siteName)}</div>
-          <h1>Every lesson, <em>brought to life.</em></h1>
+          <h1>Let's learn, play &amp; <span class="hl">explore!</span> <span class="wave" aria-hidden="true">🚀</span></h1>
           <p class="lede">${esc(site.tagline || '')}. Everything is organised exactly like the textbooks: pick a subject and grade, open a unit, and every lesson lists its book pages, flashcards, interactivities, simulations and games.</p>
           <form class="hero-search" id="hero-search"><span>${ICONS.search}</span>
             <input class="input" name="q" type="search" placeholder="Try “fractions”, “photosynthesis” or “संज्ञा”" autocomplete="off" aria-label="Search the library"></form>
           <div class="stat-line">
-            <div><b>${subjects.length}</b><span>Subjects</span></div>
-            <div><b>${grades.size}</b><span>Grades</span></div>
-            <div><b>${lessons.length}</b><span>Lessons</span></div>
-            <div><b>${items.length}</b><span>Resources</span></div>
+            <div><b data-count="${subjects.length}">${subjects.length}</b><span>Subjects</span></div>
+            <div><b data-count="${grades.size}">${grades.size}</b><span>Grades</span></div>
+            <div><b data-count="${lessons.length}">${lessons.length}</b><span>Lessons</span></div>
+            <div><b data-count="${live.length}">${live.length}</b><span>Resources</span></div>
           </div>
         </div>
         <div class="hero-art" aria-hidden="true">${covers}</div>
       </section>
 
       <section class="section">
-        <div class="section-head"><div class="grow"><h2>Browse by subject</h2><p>Choose a subject, then a grade, to see every unit and lesson in the book.</p></div></div>
+        <div class="section-head"><div class="grow"><h2>Pick a <span class="em">subject</span> 📚</h2><p>Choose a subject, then a grade, to see every unit and lesson in the book.</p></div></div>
         <div class="subject-grid">${subjects.map(subjectCard).join('')}</div>
       </section>
 
       <section class="section">
-        <div class="section-head"><div class="grow"><h2>Browse by format</h2><p>Looking for a particular kind of resource? Start here.</p></div></div>
+        <div class="section-head"><div class="grow"><h2>How do you want to <span class="em">learn</span> today? ✨</h2><p>Read a book, flip some flashcards, explore a simulation or play a game.</p></div></div>
         <div class="format-grid">${typesPresent().map((t) => {
           const info = GP.TYPE_INFO[t];
           return `<a class="format-tile" href="${hType(t)}" style="--tc:${info.color}"><span class="ico">${ICONS[info.icon]}</span>
-            <h3>${esc(info.plural)} <span>${items.filter((i) => i.type === t).length}</span></h3><p>${esc(info.blurb)}</p></a>`;
+            <h3>${esc(info.plural)} <span>${live.filter((i) => i.type === t).length}</span>${recentCount(live.filter((i) => i.type === t)) ? '<span class="newtag">NEW</span>' : ''}</h3><p>${esc(info.blurb)}</p></a>`;
         }).join('')}</div>
       </section>
 
       ${recent.length ? `<section class="section">
-        <div class="section-head"><div class="grow"><h2>Recently added</h2><p>The newest resources across all subjects.</p></div></div>
+        <div class="section-head"><div class="grow"><h2>${fresh.length ? 'New this week 🌟' : 'Recently added'}</h2><p>${fresh.length ? 'Just added to the library. Be the first to try them!' : 'The newest resources across all subjects.'}</p></div></div>
         <div class="res-grid">${recent.map((i) => resCard(i)).join('')}</div></section>` : ''}
 
       <section class="section">
-        <div class="section-head"><div class="grow"><h2>How the library is organised</h2></div></div>
+        <div class="section-head"><div class="grow"><h2>How it all fits together 🧩</h2></div></div>
         <div class="format-grid">
           <div class="format-tile" style="--tc:var(--accent)"><span class="ico">${ICONS.book}</span><h3>Subject &amp; grade</h3><p>Each subject is split into grades, just like the printed books on the shelf.</p></div>
           <div class="format-tile" style="--tc:var(--accent)"><span class="ico">${ICONS.menu}</span><h3>Units &amp; lessons</h3><p>Inside a grade, units and lessons follow the textbook order, with the LMS chapter name alongside.</p></div>
@@ -142,10 +165,11 @@
     const st = GP.subjectStyle(s.name);
     const ls = lessons.filter((l) => l.subject === s.name);
     const n = items.filter((i) => i.subject === s.name).length;
-    return `<div class="subject-card fade-in" style="--c:${st.color}">
+    const fresh = recentCount(live.filter((i) => i.subject === s.name));
+    return `<div class="subject-card" style="--c:${st.color}">
       <a class="top" href="${hSubject(s.name)}" style="color:inherit;text-decoration:none"><span class="glyph">${st.icon ? ICONS[st.icon] : esc(st.glyph)}</span><h3>${esc(s.name)}</h3></a>
       <p>${esc(st.blurb)}</p>
-      <div class="meta"><span>${plural(ls.length, 'lesson')}</span><span>${plural(n, 'resource')}</span></div>
+      <div class="meta"><span>${plural(ls.length, 'lesson')}</span><span>${plural(n, 'resource')}</span>${fresh ? `<span class="newchip">★ ${fresh} new</span>` : ''}</div>
       <div class="grade-chips">${gradesOf(s.name).map((g) => `<a href="${hCourse(s.name, g)}" class="${courseItems(s.name, g).length ? 'has' : ''}" title="${esc(s.name)} · Grade ${g}">${g}</a>`).join('')}</div>
     </div>`;
   }
@@ -161,8 +185,9 @@
       const ci = courseItems(subject, g);
       const covered = cl.filter((l) => resourcesOf(l).length).length;
       const u = new Set(cl.map((l) => `${l.strand}|${l.unit}`)).size;
-      return `<a class="volume fade-in" href="${hCourse(subject, g)}" style="--c:${st.color}">
-        <div class="cover" style="background:linear-gradient(160deg, ${st.color}, color-mix(in srgb, ${st.color} 42%, #10131c))">
+      const fresh = recentCount(ci.filter((i) => i.status === 'ready'));
+      return `<a class="volume" href="${hCourse(subject, g)}" style="--c:${st.color}">
+        <div class="cover" style="background:linear-gradient(160deg, ${st.color}, color-mix(in srgb, ${st.color} 55%, #262a5c))">${fresh ? `<span class="newchip">★ ${fresh} new</span>` : ''}
           <small>${esc(subject)}</small><div><div class="g">${g}</div><div class="s">Grade ${g}</div></div></div>
         <div class="info"><span>${plural(u, 'unit')} · ${plural(cl.length, 'lesson')} · ${plural(ci.length, 'resource')}</span>
           <span class="meter" title="${covered} of ${cl.length} lessons have resources"><i style="width:${cl.length ? Math.round(covered / cl.length * 100) : 0}%"></i></span></div></a>`;
@@ -221,7 +246,7 @@
     const otherGrades = gradesOf(subject).filter((g) => g !== grade);
 
     return `${crumbs([['Library', '#/'], [subject, hSubject(subject)], [`Grade ${grade}`]])}
-      <header class="course-head">
+      <header class="course-head" style="--c:${st.color}">
         <div class="eyebrow" style="color:${st.color}">${esc(subject)}</div>
         <h1>Grade ${grade}</h1>
         <div class="facts"><span><b>${units.length}</b> units</span><span><b>${cl.length}</b> lessons</span><span><b>${ci.length}</b> resources</span><span><b>${covered}</b> of ${cl.length} lessons ready</span></div>
@@ -231,7 +256,7 @@
         </div>` : ''}
         ${otherGrades.length ? `<div class="grade-chips" style="--c:${st.color};margin-top:4px"><span class="small faint" style="align-self:center;margin-right:4px">Other grades</span>${otherGrades.map((g) => `<a href="${hCourse(subject, g)}">${g}</a>`).join('')}</div>` : ''}
       </header>
-      <div class="course-layout">
+      <div class="course-layout" style="--c:${st.color}">
         <aside class="toc"><h4>Contents</h4>${toc}</aside>
         <div>${body}
           ${loose.length ? `<section class="unit-block"><header><span class="u">More</span><h2>Other ${esc(subject)} resources for Grade ${grade}</h2></header><div class="res-grid">${loose.map((i) => resCard(i, { showPlace: false })).join('')}</div></section>` : ''}
@@ -259,7 +284,7 @@
         <div class="facts small muted">${esc(l.subject)} · Grade ${l.grade} · ${rs.length ? plural(rs.length, 'resource') : 'no resources yet'}</div>
       </header>
       ${rs.length ? `<div class="filterbar" style="margin:-8px 0 20px">${formats.map((t) => `<span class="chip" style="cursor:default">${GP.typeIcon(t)}${esc(GP.TYPE_INFO[t].plural)} <span class="n">${rs.filter((i) => i.type === t).length}</span></span>`).join('')}</div>
-        <div class="res-grid">${rs.map((i) => resCard(i, { showPlace: false })).join('')}</div>` : `<div class="lesson-empty"><h3>Resources are on the way</h3><p>Nothing has been published for this lesson yet. Other lessons in this unit are listed below.</p></div>`}
+        <div class="res-grid">${rs.map((i) => resCard(i, { showPlace: false })).join('')}</div>` : `<div class="lesson-empty"><span class="big">🚧</span><h3>Resources are on the way!</h3><p>Nothing has been published for this lesson yet. Other lessons in this unit are listed below.</p></div>`}
       ${siblings.length > 1 ? `<section class="section"><div class="section-head"><div class="grow"><h2>${esc(l.unitTitle)}</h2><p>All lessons in this unit</p></div></div>
         <div class="result-lessons">${siblings.map((x) => `<a href="${hLesson(x.id)}" style="${x.id === l.id ? 'background:var(--surface)' : ''}">
           <span><small>Lesson ${x.lesson}</small><br>${esc(x.lessonTitle)}</span><span class="small faint" style="align-self:center">${resourcesOf(x).length ? plural(resourcesOf(x).length, 'resource') : ''}</span></a>`).join('')}</div></section>` : ''}
@@ -346,7 +371,77 @@
     document.title = title === site.siteName ? title : `${title} · ${site.siteName}`;
     if (parts[0] !== 'search') $('q').value = '';
     window.scrollTo({ top: 0, behavior: 'instant' });
+    $('view').classList.remove('route-in');
+    void $('view').offsetWidth;
+    $('view').classList.add('route-in');
+    animate();
   }
+
+  // ---------------------------------------------------------------- motion
+  const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const reveal = 'IntersectionObserver' in window && !calm
+    ? new IntersectionObserver((entries) => entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('in'); reveal.unobserve(e.target); } }), { rootMargin: '0px 0px -40px 0px' })
+    : null;
+  function animate() {
+    if (reveal) {
+      // cards slide up as they scroll into view, a little after their neighbours
+      const groups = ['.subject-grid > *', '.format-grid > *', '.res-grid > *', '.volume-grid > *', '.unit-block', '.result-lessons > *', '.section-head', '.lesson-row'];
+      for (const sel of groups) {
+        $('view').querySelectorAll(sel).forEach((el, n) => {
+          el.classList.add('reveal');
+          el.style.setProperty('--d', `${Math.min(n % 8, 7) * 60}ms`);
+          reveal.observe(el);
+        });
+      }
+    }
+    // the big numbers on the home page count up
+    $('view').querySelectorAll('[data-count]').forEach((el) => {
+      const to = +el.dataset.count;
+      if (calm || !to) return;
+      const t0 = performance.now();
+      const step = (t) => {
+        const k = Math.min(1, (t - t0) / 1100);
+        el.textContent = Math.round(to * (1 - Math.pow(1 - k, 3)));
+        if (k < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    });
+  }
+
+  // ---------------------------------------------------------------- bell: what's new
+  async function markSeen() {
+    try { seenAt = Date.parse((await GP.api('/api/me/seen', { method: 'POST' })).lastSeenNew) || Date.now(); } catch { seenAt = Date.now(); }
+    drawBell();
+  }
+
+  function drawBell() {
+    const n = unseen().length;
+    $('bell').innerHTML = `<button class="icon-btn ${n ? 'ring' : ''}" id="bell-btn" type="button" aria-haspopup="true" title="${n ? plural(n, 'new resource') : 'What\'s new'}">${ICONS.bell}</button>
+      ${n ? `<span class="bell-count">${n > 99 ? '99+' : n}</span>` : ''}`;
+  }
+
+  function openBell() {
+    const news = unseen();
+    const list = news.length ? news : live.filter(GP.isRecent).sort(byNewest);
+    const panel = document.createElement('div');
+    panel.className = 'notif';
+    panel.innerHTML = `<header><h3>${news.length ? 'New for you ✨' : 'What\'s new'}</h3>${news.length ? '<span class="newchip">' + news.length + ' new</span>' : ''}</header>
+      ${list.length ? list.slice(0, 15).map((i, k) => {
+        const t = GP.typeInfo(i.type);
+        return `<a class="notif-item" href="${hItem(i)}" style="--tc:${t.color};animation-delay:${k * 40}ms"><span class="i">${GP.typeIcon(i.type)}</span>
+          <span><b>${esc(i.title)}</b><small>${esc(i.type)} · ${esc(GP.subjectShort(i.subject))}${i.grade ? ' · ' + esc(GP.lessonLabel(i)) : ''} · ${esc(GP.when(new Date(GP.publishedOf(i)).toISOString()))}</small></span></a>`;
+      }).join('') : '<div class="empty"><span class="big">🎈</span>You\'re all caught up! New resources will show up here.</div>'}`;
+    $('bell').appendChild(panel);
+    if (news.length) markSeen().then(() => $('bell').appendChild(panel)); // the count clears; the list stays open
+    setTimeout(() => document.addEventListener('click', function close(e) {
+      if (panel.contains(e.target)) return;
+      panel.remove();
+      document.removeEventListener('click', close);
+    }), 0);
+  }
+
+  $('bell').addEventListener('click', (e) => { if (e.target.closest('#bell-btn') && !$('bell').querySelector('.notif')) openBell(); });
+  drawBell();
 
   // ---------------------------------------------------------------- events
   const goSearch = (q) => { q = q.trim(); location.hash = q ? '#/search/' + enc(q) : '#/'; };
@@ -359,6 +454,12 @@
     goSearch(e.target.q.value);
   });
   $('view').addEventListener('click', (e) => {
+    if (e.target.closest('[data-seen]')) {
+      const b = $('new-banner');
+      b.animate([{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'translateY(-14px) scale(.97)' }], { duration: 350, easing: 'ease-in' }).finished.then(() => b.remove());
+      markSeen();
+      return;
+    }
     const j = e.target.closest('[data-jump]');
     if (!j) return;
     e.preventDefault();
