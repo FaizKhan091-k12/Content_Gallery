@@ -1,0 +1,32 @@
+# Render Blueprint: New > Blueprint > pick this repository. Fill in the four R2 values when Render asks.
+services:
+  - type: web
+    name: game-portal
+    runtime: node
+    plan: free
+    buildCommand: echo "no build step (zero dependencies)"
+    startCommand: node server/server.js
+    healthCheckPath: /healthz
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: STORAGE
+        value: r2
+      - key: TRUST_PROXY
+        value: "1"
+      # The only account that can be created at /setup: the portal owner, with full admin rights
+      - key: ADMIN_USERNAME
+        value: faiz.khan@k12onlineschools.com
+      # Cloudflare R2 (R2 > Manage API tokens > Create token with "Object Read & Write" on your bucket)
+      - key: R2_ACCOUNT_ID
+        sync: false
+      - key: R2_ACCESS_KEY_ID
+        sync: false
+      - key: R2_SECRET_ACCESS_KEY
+        sync: false
+      - key: R2_BUCKET
+        sync: false
+      # One-time code for creating the first admin at /setup. Render generates it; copy it from
+      # Environment in the Render dashboard. After the admin exists the setup page is closed for good.
+      - key: SETUP_CODE
+        generateValue: true

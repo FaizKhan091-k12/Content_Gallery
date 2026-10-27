@@ -1,0 +1,131 @@
+# Source: Google Sheet "K12 Content Upload Status" > Math tab (exported 2026-10-27)
+# grade|unit|unit title|lesson|lesson title|chapter name on LMS
+1|1|Unit 1: Number Sense|1|Counting Up to 100|1. Numbers to 100
+1|1|Unit 1: Number Sense|2|Working with numbers to 100|5. Working with numbers to 100
+1|1|Unit 1: Number Sense|3|Rounding and Fractions|8. Numbers to 100 (2)
+1|2|Unit 2: Calculations, Money, and Basic Geometry|1|Calculating: Connecting Operations|10. Calculating
+1|2|Unit 2: Calculations, Money, and Basic Geometry|2|Money: Value and Computation|6. Money
+1|2|Unit 2: Calculations, Money, and Basic Geometry|3|Geometry: 3D and 2D Shapes|2. Geometry
+1|3|Unit 3: Geometry and Measurement|1|Measures: Length and Lines|3. Measures
+1|3|Unit 3: Geometry and Measurement|2|Geometry (2): Angles and Circles|11. Geometry (2)
+1|3|Unit 3: Geometry and Measurement|3|Symmetry, Position, and Movement|15. Symmetry, position and movement
+1|4|Unit 4: Time and Advanced Measurement|1|Time: Units and the Calendar|7. Time
+1|4|Unit 4: Time and Advanced Measurement|2|Telling the Time|12. Telling the time
+1|4|Unit 4: Time and Advanced Measurement|3|Measures (2): Mass and Capacity|13. Measures (2)
+1|5|Unit 5: Statistics and Probability|1|Statistics: Carroll Diagrams and Tally Charts|4. Statistics
+1|5|Unit 5: Statistics and Probability|2|Statistics (2): Venn Diagrams and Block Graphs|9. Statistics (2)
+1|5|Unit 5: Statistics and Probability|3|Pattern and Probability|14. Pattern and probability
+2|1|Unit 1: Exploring Numbers|1|Reading and Writing Numbers|1. Numbers to 1000
+2|1|Unit 1: Exploring Numbers|2|Hundreds, Tens, and Ones|1. Numbers to 1000
+2|1|Unit 1: Exploring Numbers|3|Tally Charts and Frequency Tables|2. Statistics Tally charts and frequency tables
+2|2|Unit 2: Calculating And Constructing|1|Addition, Subtraction, and Money|3. Addition, subtraction and money
+2|2|Unit 2: Calculating And Constructing|2|3D Shapes|4. 3D shapes
+2|2|Unit 2: Calculating And Constructing|3|Exploring Multiplication and Division|5. Multiplication and division
+2|3|Unit 3: Measure, Fraction, and Time|1|Measurement, Area, and Perimeter|6. Measurement, area and perimeter
+2|3|Unit 3: Measure, Fraction, and Time|2|Fractions of Shapes|7. Fractions of shapes
+2|3|Unit 3: Measure, Fraction, and Time|3|Time and Timetables|8. Time & 14. Time (2)
+2|4|Unit 4: More Arithmetic and Graphs|1|More Addition and Subtraction|9. More addition and subtraction
+2|4|Unit 4: More Arithmetic and Graphs|2|Graphs, Venn, and Carroll Diagrams|10. Graphs
+2|4|Unit 4: More Arithmetic and Graphs|3|Extending Multiplication and Division|11. More multiplication and division
+2|5|Unit 5: Advanced fractions and Measures|1|Calculating with More Fractions|12. More fractions
+2|5|Unit 5: Advanced fractions and Measures|2|Measure: Mass, Capacity, and Temperature|13. Measure
+2|5|Unit 5: Advanced fractions and Measures|3|Angles, Direction, and Movement|15. Angles and movement
+2|5|Unit 5: Advanced fractions and Measures|4|Patterns, Symmetry, and Chance|16. Chance 17. Pattern and symmetry
+3|1|Unit 1: Numbers and the Number System|1|Understanding Numbers|1. Numbers and the number system
+3|1|Unit 1: Numbers and the Number System|2|Comparing, Ordering, and Rounding Numbers|9. Comparing, rounding and dividing
+3|1|Unit 1: Numbers and the Number System|3|Number Patterns and Special Numbers|15. Special numbers
+3|2|Unit 2: Operations with Whole Numbers|1|Addition and Subtraction Strategies|3. Addition and subtraction of whole numbers
+3|2|Unit 2: Operations with Whole Numbers|2|More Addition and Subtraction|13. Addition and subtraction
+3|2|Unit 2: Operations with Whole Numbers|3|Multiplication, Multiples, and Factors|5. Multiplication, multiples and factors
+3|3|Unit 3: Advanced Operations and Fractions|1|Multiplication and Division|17. Multiplication and division
+3|3|Unit 3: Advanced Operations and Fractions|2|Understanding Fractions|7. Fractions
+3|3|Unit 3: Advanced Operations and Fractions|3|Equivalent Fractions and Percentages|11. Fractions and percentages
+3|4|Unit 4: Geometry and Spatial Reasoning|1|2D and 3D Shapes|6. 2D shapes 12. Investigating 3D shapes and nets
+3|4|Unit 4: Geometry and Spatial Reasoning|2|Angles|8. Angles
+3|5|Unit 5: Measurement, Time, and Position|1|Area and Perimeter|14. Area and perimeter
+3|5|Unit 5: Measurement, Time, and Position|2|Time and Timetables|2. Time and timetables
+3|5|Unit 5: Measurement, Time, and Position|3|Position, Direction, and Movement|18. Position, direction and movement
+3|6|Unit 6: Data Handling and Probability|1|Data Interpreattion|10. Collecting and recording data 16. Data display and interpretation
+3|6|Unit 6: Data Handling and Probability|2|Introduction to Probability|4. Probability
+4|1|Unit 1: Place Value and Number System|1|Place Value of Large Numbers|1. The number system
+4|1|Unit 1: Place Value and Number System|2|Number Patterns, Sequences, and Primes|3. Numbers and sequences
+4|1|Unit 1: Place Value and Number System|3|Number and the Laws of Arithmetic|17. Number and the laws of arithmetic
+4|2|Unit 2: Addition, Subtraction, and Fractions|1|Multi-Digit Addition and Subtraction|5. Addition and subtraction
+4|2|Unit 2: Addition, Subtraction, and Fractions|2|Equivalent Fractions, Decimals, and Percentages|7. Fractions, decimals and percentages
+4|2|Unit 2: Addition, Subtraction, and Fractions|3|Addition and Subtraction of Fractions|9. Addition and subtraction of fractions
+4|3|Unit 3: Multiplication, Division, and Proportions|1|Multiplication and Division Strategies|11. Multiplication and division
+4|3|Unit 3: Multiplication, Division, and Proportions|2|Multiplying and Dividing Fractions and Decimals|15. Multiplying and dividing fractions and decimals
+4|3|Unit 3: Multiplication, Division, and Proportions|3|Ratio and Proportion|13. Ratio and proportion
+4|4|Unit 4: Geometry: 2D, 3D, and Angles|1|Classifying 2D Shapes and Symmetry|2. 2D shape and pattern
+4|4|Unit 4: Geometry: 2D, 3D, and Angles|2|3D Shapes and Nets|6. 3D shapes
+4|4|Unit 4: Geometry: 2D, 3D, and Angles|3|Angles|10. Angles
+4|5|Unit 5: Measurement, Time, and Position|1|Perimeter and Area|14. Area and perimeter
+4|5|Unit 5: Measurement, Time, and Position|2|Time, Intervals, and Time Zones|16. Time
+4|5|Unit 5: Measurement, Time, and Position|3|Position, Coordinates, and Translation|18. Position and direction
+4|6|Unit 6: Data Handling, Averages, and Probability|1|Representing and Interpreting Data|12. Data
+4|6|Unit 6: Data Handling, Averages, and Probability|2|Averages: Mode and Median|4. Averages
+4|6|Unit 6: Data Handling, Averages, and Probability|3|Probability: Likelihood and Experiments|8. Probability
+5|1|Unit 1: Number System|1|Large Numbers and Decimals|1. The number system
+5|1|Unit 1: Number System|2|Number Patterns and Rules|2. Numbers and sequences
+5|1|Unit 1: Number System|3|Exploring Mean, Median, Mode, and Range|3. Averages
+5|2|Unit 2: Operations and Geometry|1|Adding and Subtracting Integers|4. Addition and subtraction (1)
+5|2|Unit 2: Operations and Geometry|2|Classifying Quadrilaterals and Circles|5. 2D shapes
+5|2|Unit 2: Operations and Geometry|3|Equivalent Fractions and Percentages|6. Fractions and percentages
+5|3|Unit 3: Measurement and Probability|1|Time and Geometric Measurements|7. Exploring measures
+5|3|Unit 3: Measurement and Probability|2|Operations with Fractions and Decimals|8. Addition and subtraction (2)
+5|3|Unit 3: Measurement and Probability|3|Understanding Likelihood and Chance|9. Probability
+5|4|Unit 4: Multiplication, Volume, and Ratio|1|Multi-Digit Multiplication and Division|10. Multiplication and division (1)
+5|4|Unit 4: Multiplication, Volume, and Ratio|2|3D Objects, Volume, and Capacity|11. 3D shapes
+5|4|Unit 4: Multiplication, Volume, and Ratio|3|Working with Ratios and Proportions|12. Ratio and proportion
+5|5|Unit 5: Angles, Advanced Calculations, and Data|1|Measuring Shapes and Angles|13. Angles
+5|5|Unit 5: Angles, Advanced Calculations, and Data|2|Multiplying Fractions and Decimals|14. Multiplication and division (2)
+5|5|Unit 5: Angles, Advanced Calculations, and Data|3|Data Representation and Graphs|15. Data
+5|6|Unit 6: Rules and Transformations|1|Properties and Rules of Arithmetic|16. The laws of arithmetic
+5|6|Unit 6: Rules and Transformations|2|Reflections, Rotations, and Coordinates|17. Transformations
+6|1|Unit 1: Number System|1|Understanding Numbers and Place Value|3. Place value and rounding
+6|1|Unit 1: Number System|2|Factors, Multiples, and Prime Factorization|1. Integers (Part 1.3 - 1.6)
+6|1|Unit 1: Number System|3|Integers and the Absolute Value|1. Integers (Part 1.1 - 1.2)
+6|2|Unit 2: Fractions, Decimals & Percent|1|Fraction Concepts and Operations|7. Fractions
+6|2|Unit 2: Fractions, Decimals & Percent|2|Decimals and Calculations|4. Decimals
+6|2|Unit 2: Fractions, Decimals & Percent|3|Percentages and Equivalences|10. Percentages
+6|3|Unit 3: Ratios, Rates & Proportional Reasoning|1|Ratio and Proportion|12. Ratio and proportion
+6|3|Unit 3: Ratios, Rates & Proportional Reasoning|2|Sequences, Functions, and Rates|9. Sequences and functions
+6|4|Unit 4: Expressions and Introductory Algebra|1|Expressions, Formulae, and Equations|2. Expressions, formulae and equations
+6|4|Unit 4: Expressions and Introductory Algebra|2|Graphs of Functions|11. Graphs
+6|5|Unit 5: Geometry & Measurement|1|Angles and Constructions|5. Angles and constructions
+6|5|Unit 5: Geometry & Measurement|2|Shapes and Symmetry|8. Shapes and symmetry
+6|5|Unit 5: Geometry & Measurement|3|Shapes, Area, and Volume|15. Shapes, area and volume
+6|6|Unit 6: Data, Statistics & Probability|1|Position, Coordinates, and Transformation|14. Position and transformation
+6|6|Unit 6: Data, Statistics & Probability|2|Collecting and Interpreting Data|6. Collecting data & 16. Interpreting results
+6|6|Unit 6: Data, Statistics & Probability|3|Probability and Experimental Chance|13. Probability
+7|1|Unit 1: The Number System & Exponents|1|Integer Operations|1. Integers
+7|1|Unit 1: The Number System & Exponents|2|Place Value & Estimation|3. Place value and rounding
+7|1|Unit 1: The Number System & Exponents|3|Decimal Math|4. Decimals
+7|2|Unit 2: Fractions, Patterns, and Percentages|1|Fractional Math|7. Fractions
+7|2|Unit 2: Fractions, Patterns, and Percentages|2|Sequences and functions|9. Sequences and functions
+7|2|Unit 2: Fractions, Patterns, and Percentages|3|Percentages|10. Percentages
+7|3|Unit 3: The Language of Algebra and Proportionality|1|Algebra & Equations|2. Expressions, formulae and equations
+7|3|Unit 3: The Language of Algebra and Proportionality|2|Graphing Functions|11. Graphs
+7|3|Unit 3: The Language of Algebra and Proportionality|3|Proportional Math|12. Ratio and proportion
+7|4|Unit 4: Geometry: Construction, Shapes, and Motion|1|Angle Properties and Constructions|5. Angles and constructions
+7|4|Unit 4: Geometry: Construction, Shapes, and Motion|2|Geometry & Symmetry|8. Shapes and symmetry
+7|4|Unit 4: Geometry: Construction, Shapes, and Motion|3|Spatial Transformations|14. Position and transformation
+7|5|Unit 5: Mensuration and Data Collection|1|2D & 3D Mensuration|15. Distance, area and volume
+7|5|Unit 5: Mensuration and Data Collection|2|Data Sampling|6. Collecting data
+7|6|Unit 6: Statistics & Probability|1|Statistical Analysis|16. Interpreting and discussing results
+7|6|Unit 6: Statistics & Probability|2|Calculating Chance|13. Probability
+8|1|Unit 1: Real Number System|1|Rational Numbers: Operations & Representation|1. Number and calculation
+8|1|Unit 1: Real Number System|2|Decimals, Growth & Estimation|3. Decimals, percentages and rounding
+8|1|Unit 1: Real Number System|3|Fractional Math|8. Fractions
+8|2|Unit 2: Algebra & Equations|1|Algebraic Expressions|2. Expressions and formulae
+8|2|Unit 2: Algebra & Equations|2|Equations and inequalities|4. Equations and inequalities
+8|2|Unit 2: Algebra & Equations|3|Sequences and functions|9. Sequences and functions
+8|3|Unit 3: Graphs, Proportions & Angles|1|Function and Graph|10. Graphs
+8|3|Unit 3: Graphs, Proportions & Angles|2|Proportional Reasoning|11. Ratio and proportion
+8|4|Unit 4: Geometry & Coordinate Geometry|1|Exploring Angles and the Pythagorean Theorem|5. Angles
+8|4|Unit 4: Geometry & Coordinate Geometry|2|Spatial Transformations|13. Position and transformation
+8|5|Unit 5: Mensuration|1|2 D Measurement and Unit Conversions|7. Shapes and measurements
+8|5|Unit 5: Mensuration|2|Volume, surface area and symmetry|14. Volume, surface area and symmetry
+8|6|Unit 6: Data & Probability|1|Statistical Sampling|6. Statistical investigations
+8|6|Unit 6: Data & Probability|2|Analyzing Data|15. Interpreting and discussing results
+8|6|Unit 6: Data & Probability|3|Probability Events|12. Probability

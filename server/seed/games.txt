@@ -1,0 +1,110 @@
+# Source: Google Sheet "UCD_Digital Assets" > Games tab (exported 2026-10-27)
+# grade|subject|lesson/topic as written in the sheet|status
+# Used to suggest a game title when a lesson is picked in the upload form.
+# Cleaned vs the sheet: "Restoratio" -> "Restoration", "Unit 3_Unit 1" -> "Unit 3_Lesson 1", "Mathematiucs" -> "Mathematics",
+# the 2nd G4 "Unit 3_Lesson 1" (The Shape Sorting Station) -> "Unit 4_Lesson 1" (G4 Unit 4 is Geometry), and the
+# untitled "G6 Unit 5_Lesson 2_" row was dropped.
+6|Biology|Food Chain|Done
+6|Biology|Food Web|Done
+6|Mathematics|Unit 1_Lesson 1_The Number Bank|Done
+6|Biology|Cell City Rescue|on hold
+6|Mathematics|Unit 1_Lesson 3_The Integer Elevator|Done
+6|Physics|Gravity and Magnetism|Done
+7|Mathematics|Unit 1_Lesson 1_Operation Speedway|Done
+1|Science|Habitat|Done
+1|Mathematics|Unit 1_Lesson 1_ Count and Help|Done
+2|Mathematics|Unit 1_Lesson 1_The Number Postman|Done
+3|Mathematics|Unit 1_Lesson 1_The Place Value Orchestra|Done
+2|Science|Lesson 1_How Do You Know Something Is Living?|Done
+4|Science|Fruit Cycle Quest|Done
+4|Mathematics|Unit 1_Lesson 1_The Number Control Center|Done
+4|Science|Echo Flight|Done
+3|Science|Lesson 1_Life Processes-Mission Mrs Gren|Done
+5|Mathematics|Unit 1_Lesson 1_ The Number Builder Board|Done
+8|Mathematics|Unit 1_Lesson 1_Rational Rogue|Done
+1|Science|Lesson 2_Plants and Animals in Different Habitats|Done
+5|Science|Lesson 2_Thermal and Electrical Conductors|Done
+1|Science|Lesson 3_How Living Things Grow and Change|Done
+1|Science|Lesson 4_Stay Healthy, Stay Clean|Done
+1|Mathematics|Unit 1_Lesson 2_Number Tug of War!|Done
+2|Mathematics|Unit 1_Lesson 2_Space Station Supply Dash!|Done
+3|Mathematics|Unit 1_Lesson 2_Number Control Tower|Done
+4|Mathematics|Unit 1_Lesson 2_The Sequence Sphinx|Done
+1|Mathematics|Lesson 4_Calculating:Connecting Operations|Done
+4|Science|Unit 3_Lesson 1_Vibrations and Sound|Done
+5|Mathematics|Unit 1_Lesson 2_Aether Forge - The Pattern Architects|Done
+8|Mathematics|Unit 1_Lesson 2_Eco-Dome Rescue|Done
+1|Mathematics|Unit 1_Lesson 3_Toy Factory Fix!|Done
+2|Mathematics|Unit 1_Lesson 3_Deep Sea Toy Patrol|Done
+3|Mathematics|Unit 1_Lesson 3_ The Master Puzzle Wall|Done
+4|Mathematics|Unit 1_Lesson 3_The Arithme-Forge Matrix|Done
+5|Mathematics|Unit 1_Lesson 3_Data Defenders Cosmic Cargo|
+8|Mathematics|Unit 1_Lesson 3_ Kitchen Chaos|
+4|Mathematics|Unit 3_Lesson 1_ The Factory Floor Challenge|
+4|Mathematics|Unit 3_Lesson 2_ The Recipe Rescue Challenge|
+4|Mathematics|Unit 3_Lesson 3_The Bead Pattern Maker|
+4|Mathematics|Unit 4_Lesson 1_The Shape Sorting Station|
+7|Mathematics|Unit 4_Lesson 1_Angle Properties and Geometric Constructions|
+4|Mathematics|Unit 4_Lesson 2_The Box Builder Workshop|
+7|Mathematics|Unit 4_Lesson 2_Discovering Geometry and shapes|
+4|Mathematics|Unit 4_Lesson 3_ The Angle Spotter Challenge|
+7|Mathematics|Unit 4_Lesson 3_ Bearings and Transformations Challenge|
+4|Mathematics|Unit 5_Lesson 1_The Garden and Carpet Company|
+7|Mathematics|Unit5_Lesson 1_The Garden and Packaging Challenge|
+7|Mathematics|Unit5_Lesson 2_ Data Detective Challenge|
+7|Mathematics|Unit6_Lesson 1_Graph and Chart Adventure|
+4|Mathematics|Unit 5_Lesson 2_The Journey Planner|
+7|Mathematics|Unit6_Lesson 2_The Probability Challenge|
+4|Mathematics|Unit 5_Lesson 3_The Treasure Grid Hunt|
+4|Mathematics|Unit 6_Lesson 1_ The Data Detective Agency|
+4|Mathematics|Unit 6_Lesson 2_The Average All-Stars|
+7|Mathematics|Unit 3_Lesson 1_Algebra Adventure|
+4|Mathematics|Unit 6_Lesson 3_ The Probability Playground|
+7|Mathematics|Unit 3_Lesson 2_ Graph Explorer Challenge|
+1|Science|Unit 2_lesson 1_Forces Around Us|Done
+5|Mathematics|Unit 2_Lesson 1_The Sign Sorter|Done
+7|Mathematics|Unit 3_Lesson 3_ The Ratio Rescue Challenge|
+5|Mathematics|Unit 2_Lesson 2_The Quadrilateral Match|Done
+5|Mathematics|Unit 2_Lesson 3_ The Equivalent Match|Done
+8|Mathematics|Unit 2_Lesson_1_The Formula Factorys|
+8|Mathematics|Unit 2_Lesson_2_The Community Market Challenge|
+8|Mathematics|Unit 2_Lesson_3_The Art Gallery Restoration|
+5|Mathematics|Unit 3_Lesson 1_ The Rectangle Splitter|
+5|Science|Unit 4_Lesson 1_How Forces Change Objects?|Done
+5|Mathematics|Unit 3_Lesson 2_ The Decimal Builder|
+5|Mathematics|Unit 3_Lesson 3_ The Likelihood Line-Up|
+3|Mathematics|Unit 2_Lesson 3_Multiplication, Multiples, and Factors|Done
+8|Mathematics|Unit 3_Lesson_1_The Graph Discovery Lab|
+5|Mathematics|Unit 4_Lesson 1_The Product Detective|
+8|Mathematics|Unit 3_Lesson_2_The Kingdom of Balance|
+5|Mathematics|Unit 4_Lesson 2_The Shape Splitter|
+5|Mathematics|Unit 4_Lesson 3_The Ratio Matcher|
+8|Mathematics|Unit 4_Lesson_1_The Design Mission|
+5|Mathematics|Unit 5_Lesson 1_The Angle Estimator|
+8|Mathematics|Unit 4_Lesson_2_The Mural Design Mission|
+5|Mathematics|Unit 5_Lesson 2_The Decimal Detective|
+5|Mathematics|Unit 5_Lesson 3_The Graph Detective|
+8|Mathematics|Unit 5_Lesson_1_The Event Planning Mission|
+8|Mathematics|Unit 5_Lesson_2_The Museum Exhibit Mission|
+5|Mathematics|Unit 6_Lesson 1_The Bracket Blaster|
+5|Mathematics|Unit 6_Lesson 2_The Grid Guardian|
+6|Mathematics|Unit 2_Lesson 1_Benchmark Blitz|Done
+6|Mathematics|Unit 2_Lesson 2_Decimal Dash — Race to the Register|
+6|Mathematics|Unit 2_Lesson 3_ The Equivalence Grid|
+8|Mathematics|Unit 6_Lesson_1_The Wildlife Survey Mission|
+8|Mathematics|Unit 6_Lesson_2_City Transport Challenge|
+8|Mathematics|Unit 6_Lesson_3_The Chance Quest|
+6|Mathematics|Unit 3_Lesson 1_Ratio Rally|
+6|Mathematics|Unit 3_Lesson 2_Pattern Detective|
+7|Mathematics|Unit 2_Lesson_3_The Change Tracker Challenge|
+6|Mathematics|Unit 4 _ Lesson 1_ The Mystery Machine — Function Rule Explorer|
+6|Mathematics|Unit 4_Lesson 2_Reading the Story in a Line|
+6|Mathematics|Unit 5_Lesson 1_ Angle Architect|
+6|Mathematics|Unit 5_Lesson 3_Grid Cover - Area, Volume, and Surface Area Explorer|
+6|Mathematics|Unit 6_Lesson 1_The Grid Treasure Hunt|
+6|Mathematics|Unit 6_Lesson 2_Sample Size Showdown - Data and Sampling Explorer|
+6|Mathematics|Unit 6_Lesson 3_The Likelihood Line-Up|
+7|Mathematics|Unit 2_Lesson_2_The Wildlife Rescue Mission|
+3|Mathematics|Unit 3_Lesson 3_Multiplication and Division|Done
+1|Mathematics|Unit 3_Lesson 1_Measures|Done
+1|Mathematics|Unit 4_Lesson 3_Measures (2)|Done

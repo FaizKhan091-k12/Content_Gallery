@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Play</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+  <div class="player" id="player">
+    <div class="player-bar">
+      <a class="btn sm" id="back" href="/" aria-label="Back to library"></a>
+      <div class="grow" style="min-width:0">
+        <div class="t" id="title">Loading...</div>
+        <div class="crumb" id="crumb"></div>
+      </div>
+      <button class="btn sm" id="reload" title="Restart"></button>
+      <button class="btn sm" id="full" title="Full screen"></button>
+    </div>
+    <iframe id="frame" title="Game" allow="fullscreen; autoplay; gamepad" allowfullscreen></iframe>
+    <div class="loading" id="loading">Loading game...</div>
+  </div>
+  <script src="/assets/common.js"></script>
+  <script src="/assets/play.js"></script>
+</body>
+</html>

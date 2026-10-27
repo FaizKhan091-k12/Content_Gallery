@@ -1,0 +1,7 @@
+# runtime data - never commit accounts, sessions or uploaded builds
+data/
+storage/
+tools/
+node_modules/
+*.log
+.env

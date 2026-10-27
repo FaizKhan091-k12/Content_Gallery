@@ -1,0 +1,12 @@
+{
+  "name": "game-portal",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Private, password-protected library of WebGL games and interactives organised by book (subject, grade, unit, lesson).",
+  "main": "server/server.js",
+  "scripts": {
+    "start": "node server/server.js",
+    "reset-admin": "node server/reset-admin.js"
+  },
+  "engines": { "node": ">=18" }
+}

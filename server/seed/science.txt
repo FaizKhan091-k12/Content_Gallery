@@ -1,0 +1,136 @@
+# Source: Google Sheet "K12 Content Upload Status" > Sci tab (exported 2026-10-27)
+# grade|unit|unit title|lesson|lesson title|chapter name on LMS
+# Grades 6-8 are split into strands; a "Biology_/Chemistry_/Physics_" prefix starts a strand, later units without a prefix belong to the same strand.
+1|1|Environments and Habitats|1|Habitats — Homes for Living Things|Environments and Habitats
+1|1|Environments and Habitats|2|Plants and Animals in Different Habitats|Environments and Habitats
+1|1|Environments and Habitats|3|How Living Things Grow and Change|Humans and Animals Grow
+1|1|Environments and Habitats|4|Stay Healthy, Keep Clean|Humans and Animals Grow
+1|2|Forces and Movement|1|Forces Around Us|Forces and Movement
+1|2|Forces and Movement|2|How Forces Change Things|Forces and Movement
+1|3|Materials Around Us|1|Natural and Made Materials|Getting Materials Right
+1|3|Materials Around Us|2|Properties and Uses of Materials|Getting Materials Right
+1|3|Materials Around Us|3|Testing and Changing Materials|Getting Materials Right
+1|4|Light and Electricity|1|Sources of Light|Light
+1|4|Light and Electricity|2|Light, Darkness, and Daytime Changes|Light
+1|4|Light and Electricity|3|Electricity Around Us|Electricity
+1|4|Light and Electricity|4|Safe Electricity and Simple Circuits|Electricity
+2|1|Living Things Grow and Stay Healthy|1|How Do You Know Something Is Living?|Plants are Living Things
+2|1|Living Things Grow and Stay Healthy|2|Plants: Parts, Growth and Needs|Plants are Living Things
+2|1|Living Things Grow and Stay Healthy|3|Human Body Parts and Organs|Staying Alive
+2|1|Living Things Grow and Stay Healthy|4|Animals and Life Cycles|Staying Alive
+2|2|Materials and Their Properties|1|Solids, Liquids and Gases|Mixing Materials
+2|2|Materials and Their Properties|2|Mixing, Separating and Dissolving Materials|Mixing Materials
+2|2|Materials and Their Properties|3|Separating Materials from Rocks|Mixing Materials
+2|3|Light, Forces and Magnets|1|Light and Shadows|Light and Shadows
+2|3|Light, Forces and Magnets|2|How Light Travels Through Different Materials|Light and Shadows
+2|3|Light, Forces and Magnets|3|Force and Movement|Forces and Magnets
+2|3|Light, Forces and Magnets|4|Magnets and Magnetic Materials|Forces and Magnets
+2|4|Earth, Sun, and Moon|1|The Earth, Sun and Moon|The Earth and the Moon
+2|4|Earth, Sun, and Moon|2|The Moon|The Earth and the Moon
+2|4|Earth, Sun, and Moon|3|The Phases of the Moon|The Earth and the Moon
+3|1|Life Processes in Living Things|1|What are Life Processes?|Living Things
+3|1|Life Processes in Living Things|2|Bones, Muscles and Movement|Living Things
+3|1|Life Processes in Living Things|3|Medicines and Infectious Diseases|Living Things
+3|2|Unit 2: Energy and Electricity|1|Energy Around Us and Energy Transfer|Energy
+3|2|Unit 2: Energy and Electricity|2|Energy Changes and Living Things|Energy
+3|2|Unit 2: Energy and Electricity|3|Electricity|Electricity
+3|3|Unit 3: Materials and Changes|1|Materials and Their Properties|Materials
+3|3|Unit 3: Materials and Changes|2|Solids, Liquids and Changes|Materials
+3|3|Unit 3: Materials and Changes|3|Chemical Changes|Materials
+3|4|Unit 4: Earth and Habitats|1|Structure of the Earth|Earth and Its Habitats
+3|4|Unit 4: Earth and Habitats|2|Volcanoes and Earthquakes|Earth and Its Habitats
+3|4|Unit 4: Earth and Habitats|3|Habitats Around Us|Earth and Its Habitats
+3|5|Unit 5: Light and Vision|1|Light and Seeing|Light
+3|5|Unit 5: Light and Vision|2|Light Travels and Reflects|Light
+3|5|Unit 5: Light and Vision|3|Shadows and the Human Eye|Light
+4|1|Life Cycle of Flowers|1|From Seed to Fruit|Life cycles of flowering plants
+4|1|Life Cycle of Flowers|2|From Pollination to Seed Dispersal|Life cycles of flowering plants
+4|1|Life Cycle of Flowers|3|How Seeds Grow Into Plants?|Life cycles of flowering plants
+4|2|Food, Digestion and Health|1|Inside the Digestive System|The Digestive System
+4|2|Food, Digestion and Health|2|Balanced Diet|The Digestive System
+4|3|Sound|1|Vibrations and Sound|Sound
+4|3|Sound|2|Pitch and Volume of Sound|Sound
+4|4|Matter|1|States of Matter and Gases|States and Properties of Matter
+4|4|Matter|2|Water and Its Properties|States and Properties of Matter
+4|4|Matter|3|Water: Evaporating, Condensing and Dissolving|States and Properties of Matter
+4|5|Forces and Magnets|1|Forces in Action!|Forces and Magnetism
+4|5|Forces and Magnets|2|Magic of Magnets|Forces and Magnetism
+4|6|Earth, Seasons and Survival|1|Day, Night and Seasons|Seasons and adaptations of plants and animals
+4|6|Earth, Seasons and Survival|2|Adaptations of Plants and Animals|Seasons and adaptations of plants and animals
+5|1|Substances and Changes|1|Classifying Materials|Materials, properties and changes
+5|1|Substances and Changes|2|Thermal and Electrical Conductors|Materials, properties and changes
+5|1|Substances and Changes|3|Reversible and Irreversible Changes|Materials, properties and changes
+5|2|Life Processes and Human Health|1|The Heart, Lungs and Blood|The Human Body
+5|2|Life Processes and Human Health|2|Growth and Reproduction|The Human Body
+5|2|Life Processes and Human Health|3|Health and Disease|The Human Body
+5|3|Earth and Ecosystem|1|Rocks and Minerals|Rocks, the Rock Cycle and Soil
+5|3|Earth and Ecosystem|2|The Rock Cycle and Soil|Rocks, the Rock Cycle and Soil
+5|3|Earth and Ecosystem|3|Food Chains and Food Webs|Food Chains and Food Webs
+5|4|Forces, Light and Space|1|Forces Around Us|Force and Electricity
+5|4|Forces, Light and Space|2|Electricity in Our Lives|Force and Electricity
+5|4|Forces, Light and Space|3|Light|Light and Solar System
+5|4|Forces, Light and Space|4|Earth and the Solar System|Light and Solar System
+6|1|Biology_Cells and Cell Processes|1|Cells: Structure, Types, and Organelles|Cells
+6|1|Biology_Cells and Cell Processes|2|Cell Functions and Processes|Cells
+6|1|Biology_Cells and Cell Processes|3|Cell Division|Cells
+6|2|Biology_Living Organisms and Microorganisms|1|Characteristics of Living Organisms and Viruses|Grouping and identifying organisms
+6|2|Biology_Living Organisms and Microorganisms|2|Classification of Living Organisms|Grouping and identifying organisms
+6|2|Biology_Living Organisms and Microorganisms|3|Microorganisms in the Environment|Microorganisms in the environment
+6|1|Chemistry_Matter – Structure, Properties, and Changes|1|Materials and Their Structure|Materials and their structure
+6|1|Chemistry_Matter – Structure, Properties, and Changes|2|Atoms, Elements, and Compounds|Materials and their structure
+6|1|Chemistry_Matter – Structure, Properties, and Changes|3|Properties of Materials|Properties of materials
+6|1|Chemistry_Matter – Structure, Properties, and Changes|4|Changes to Materials|Changes to materials
+6|1|Physics_Forces Around Us|1|Types of Forces|Forces and energy
+6|1|Physics_Forces Around Us|2|Friction and Air Resistance|Forces and energy
+6|1|Physics_Forces Around Us|3|Gravity and Magnetism|Forces and energy
+6|1|Physics_Forces Around Us|4|How and Why Objects Move?|Forces and energy
+6|2|Earth, Energy and Change|1|Our Dynamic Planet|Earth Physics
+6|2|Earth, Energy and Change|2|Energy and Sound|Forces and Energy
+6|3|Electricity|1|Electrical Systems and Circuits|Electricity
+6|3|Electricity|2|Electrical Materials & Applications|Electricity
+7|1|Physics_Mechanics|1|Motion and Speed|Forces and energy
+7|1|Physics_Mechanics|2|Understanding Motion Using Graphs|Forces and energy
+7|1|Physics_Mechanics|3|Forces and Their Turning Effects|Forces and energy
+7|1|Physics_Mechanics|4|Pressure and Motion of Particles|Forces and energy
+7|2|Physics_Light and Galaxies|1|Light and Color|Light
+7|2|Physics_Light and Galaxies|2|Galaxies and Rocks in Space|Light
+7|3|Physics_Magnetism|1|Magnetic Fields and Earth as a Giant Magnet|Magnetism
+7|3|Physics_Magnetism|2|Electromagnets Making Magnetism Work|Magnetism
+7|1|Biology_Human Body Systems and Health|1|Breathing and the Respiratory System|Respiration
+7|1|Biology_Human Body Systems and Health|2|Respiration and Blood Circulation|Respiration
+7|1|Biology_Human Body Systems and Health|3|Nutrients and Balanced Diet|Diet and Growth
+7|1|Biology_Human Body Systems and Health|4|Growth, Movement and Healthy Living|Diet and Growth
+7|2|Biology_Ecosystems|1|The Sonoran Desert|Ecosystems
+7|2|Biology_Ecosystems|2|Different Ecosystems and Intruders|Ecosystems
+7|2|Biology_Ecosystems|3|Bioaccumulation|Ecosystems
+7|1|Chemistry_Investigating Materials|1|Exploring Materials and Particles|Materials and Cycles of Earth
+7|1|Chemistry_Investigating Materials|2|Dissolving and Solutions|Properties of Materials
+7|1|Chemistry_Investigating Materials|3|How do scientists test Solubility?|Properties of Materials
+7|1|Chemistry_Investigating Materials|4|The Secret Inside Black Ink|Properties of Materials
+7|2|Chemistry_Chemical Reactions and Metal Reactivity|1|Chemical Reactions and energy Changes|Chemical Reaction
+7|2|Chemistry_Chemical Reactions and Metal Reactivity|2|Reactions of Metals with Oxygen and water|Chemical Reaction
+7|2|Chemistry_Chemical Reactions and Metal Reactivity|3|Reactions of Metals with Dilute Acids|Chemical Reaction
+8|1|Physics_Thermal Energy and Matter|1|Density and Floating|Force and Energy
+8|1|Physics_Thermal Energy and Matter|2|How Does Heat Move?|Force and Energy
+8|1|Physics_Thermal Energy and Matter|3|Energy Conservation and Evaporation|Force and Energy
+8|2|Physics_Sound and Space|1|Sound Waves|Sound and Space
+8|2|Physics_Sound and Space|2|Moon, Nebulae and Tectonics|Sound and Space
+8|3|Physics_Electricity|1|Parallel Circuits and Current Voltage|Electricity
+8|3|Physics_Electricity|2|Resistance and Practical Circuits|Electricity
+8|1|Biology_Energy, Cycles & Climate Systems|1|Photosynthesis as an Energy Process|Photosynthesis and the carbon cycle
+8|1|Biology_Energy, Cycles & Climate Systems|2|The Carbon Cycle|Photosynthesis and the carbon cycle
+8|1|Biology_Energy, Cycles & Climate Systems|3|Climate Change|Photosynthesis and the carbon cycle
+8|2|Biology_Maintaining Life|1|Water Transport & Transpiration|Maintaining life
+8|2|Biology_Maintaining Life|2|Excretion & Maintaining Internal Balance|Maintaining life
+8|2|Biology_Maintaining Life|3|Healthy Fetal Development|Maintaining life
+8|3|Biology_Genes & Inheritance|1|DNA, Genes, Chromosomes & Inheritance|Genes and inheritance
+8|3|Biology_Genes & Inheritance|2|Variation: Why Organisms Are Different|Genes and inheritance
+8|3|Biology_Genes & Inheritance|3|Natural Selection|Genes and inheritance
+8|1|Chemistry_Building Blocks of Matter|1|Atomic Structure and the Periodic Table|Properties of materials
+8|1|Chemistry_Building Blocks of Matter|2|Patterns and Trends in the Periodic Table|Properties of materials
+8|1|Chemistry_Building Blocks of Matter|3|Why Atoms Bond and the Structures They Form|Properties of materials
+8|2|Chemistry_Chemical Reactions and Reactivity|1|Reactivity and Displacement Reactions|Reactivity
+8|2|Chemistry_Chemical Reactions and Reactivity|2|Making Salts|Reactivity
+8|2|Chemistry_Chemical Reactions and Reactivity|3|Rearranging Atoms in Chemical Reactions|Reactivity
+8|3|Chemistry_Rates of Reaction|1|Measuring and Explaining Reaction Rates|Rates of reaction
+8|3|Chemistry_Rates of Reaction|2|Factors Affecting Reaction Rates|Rates of reaction

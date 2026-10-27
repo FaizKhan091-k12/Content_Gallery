@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Set up your Game Portal</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+  <main class="auth-page">
+    <div class="auth-card">
+      <img class="logo" src="/assets/favicon.svg" alt="">
+      <div>
+        <h1>Welcome! Create the admin account</h1>
+        <p class="muted" style="margin:6px 0 0">This page only works until the admin exists. Only the admin can upload games and invite people.</p>
+      </div>
+      <form id="setup">
+        <label class="field" id="code-field" hidden>Setup code (the SETUP_CODE you set on the server)<input class="input" name="setupCode" autocomplete="off" spellcheck="false"></label>
+        <label class="field">Website name<input class="input" name="siteName" value="Game Portal" maxlength="60"></label>
+        <label class="field">Your name<input class="input" name="displayName" autocomplete="name" required></label>
+        <label class="field">Admin login (email or username)<input class="input" name="username" autocomplete="username" autocapitalize="none" spellcheck="false" required></label>
+        <label class="field">Password (at least 8 characters)<input class="input" name="password" type="password" autocomplete="new-password" required minlength="8"></label>
+        <label class="field">Repeat password<input class="input" name="again" type="password" autocomplete="new-password" required minlength="8"></label>
+        <div class="alert error" id="error" hidden></div>
+        <button class="btn primary" type="submit" style="height:46px">Create admin and open the portal</button>
+      </form>
+    </div>
+  </main>
+  <script src="/assets/common.js"></script>
+  <script src="/assets/setup.js"></script>
+</body>
+</html>

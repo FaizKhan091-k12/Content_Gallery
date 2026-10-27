@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Library</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <button class="btn ghost sm only-mobile" id="toggle-filters" aria-label="Filters"></button>
+    <a class="brandmark" href="/"><img src="/assets/favicon.svg" alt=""><span id="site-name">Game Portal</span></a>
+    <label class="search"><span class="sr-only">Search</span><span id="search-icon"></span>
+      <input class="input" id="q" type="search" placeholder="Search games, lessons, chapters..." autocomplete="off"></label>
+    <div class="grow"></div>
+    <div id="user"></div>
+  </header>
+  <div class="layout">
+    <aside class="sidebar" id="sidebar">
+      <h3>Subject</h3>
+      <div class="navlist" id="subjects"></div>
+      <h3>Grade</h3>
+      <div class="chips" id="grades"></div>
+      <h3>Type</h3>
+      <div class="navlist" id="types"></div>
+      <h3>View</h3>
+      <label class="check" style="padding:0 6px"><input type="checkbox" id="show-empty"> Show lessons without content</label>
+    </aside>
+    <main class="main" id="main">
+      <div class="page-head"><div><h1 id="heading">Library</h1><div class="sub" id="subheading"></div></div></div>
+      <div id="content"></div>
+    </main>
+  </div>
+  <script src="/assets/common.js"></script>
+  <script src="/assets/app.js"></script>
+</body>
+</html>
