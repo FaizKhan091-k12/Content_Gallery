@@ -42,17 +42,17 @@
     $('tab-content').innerHTML = `
       <div class="stats">
         <div class="stat"><div class="v">${catalog.length}</div><div class="k">Items</div></div>
-        <div class="stat"><div class="v">${plays}</div><div class="k">Plays</div></div>
+        <div class="stat"><div class="v">${plays}</div><div class="k">Opens</div></div>
         <div class="stat"><div class="v">${users.users.length}</div><div class="k">People with access</div></div>
         <div class="stat"><div class="v">${GP.bytes(size)}</div><div class="k">Storage used</div></div>
       </div>
       <div class="panel">
-        <div class="row" style="margin-bottom:12px"><h2 class="grow" style="margin:0">Games &amp; interactives</h2>
+        <div class="row" style="margin-bottom:12px"><h2 class="grow" style="margin:0">Resources</h2>
           <input class="input" id="content-filter" placeholder="Filter..." style="max-width:220px;height:36px">
-          <button class="btn primary" id="new-item">${ICONS.upload} Upload new</button></div>
+          <button class="btn primary" id="new-item">${ICONS.plus} Add a resource</button></div>
         <div class="table-wrap"><table class="grid" id="content-table">
-          <thead><tr><th></th><th>Title</th><th>Book place</th><th>Type</th><th>Status</th><th>Plays</th><th>Size</th><th>Updated</th><th></th></tr></thead>
-          <tbody>${sorted.map(contentRow).join('') || '<tr><td colspan="9" class="muted" style="text-align:center;padding:30px">No content yet. Click "Upload new" to add your first game.</td></tr>'}</tbody>
+          <thead><tr><th></th><th>Title</th><th>Place in the book</th><th>Type</th><th>Status</th><th>Opens</th><th>Size</th><th>Updated</th><th></th></tr></thead>
+          <tbody>${sorted.map(contentRow).join('') || '<tr><td colspan="9" class="muted" style="text-align:center;padding:30px">Nothing yet. Click "Add a resource" to publish a book (PDF) or a Unity WebGL build: flashcards, an interactivity, a simulation or a game.</td></tr>'}</tbody>
         </table></div>
       </div>`;
     $('new-item').addEventListener('click', () => itemDialog(null));
@@ -67,7 +67,8 @@
     if (i.status === 'ready') return i.visible ? '<span class="badge ok">Live</span>' : '<span class="badge">Hidden</span>';
     if (i.status === 'processing') return '<span class="badge brand">Processing</span>';
     if (i.status === 'error') return `<span class="badge danger" title="${esc(i.error)}">Error</span>`;
-    return '<span class="badge warn">No build yet</span>';
+    const t = GP.typeOf(i.type);
+    return `<span class="badge warn">${t === 'Book' ? 'No PDF yet' : 'No build yet'}</span>`;
   }
 
   function contentRow(i) {
@@ -76,13 +77,13 @@
       <td>${thumb}</td>
       <td><b>${esc(i.title)}</b>${i.error ? `<div class="small" style="color:var(--danger)">${esc(i.error)}</div>` : ''}</td>
       <td class="small">${esc(i.subject)}<div class="muted">${esc(GP.lessonLabel(i))}</div></td>
-      <td><span class="badge">${esc(i.type)}</span></td>
+      <td><span class="badge" style="color:${GP.typeInfo(i.type).color}">${GP.typeIcon(i.type)}${esc(GP.typeOf(i.type))}</span></td>
       <td>${statusBadge(i)}</td>
       <td>${i.plays || 0}</td>
       <td class="small">${GP.bytes(i.size)}</td>
       <td class="small muted">${GP.when(i.updatedAt)}</td>
       <td style="white-space:nowrap">
-        ${i.playUrl ? `<a class="btn sm" href="/play/${esc(i.id)}" target="_blank" rel="noopener">Play</a>` : ''}
+        ${i.status === 'ready' ? `<a class="btn sm" href="/play/${esc(i.id)}" target="_blank" rel="noopener">Open</a>` : ''}
         <button class="btn sm" data-act="edit">Edit</button>
         <button class="btn sm danger" data-act="delete">Delete</button>
       </td></tr>`;
@@ -92,9 +93,11 @@
     const b = e.target.closest('button[data-act]');
     if (!b) return;
     const item = catalog.find((i) => i.id === b.closest('tr').dataset.id);
-    if (b.dataset.act === 'edit') itemDialog(item);
+    if (b.dataset.act === 'edit') {
+      itemDialog(item);
+    }
     if (b.dataset.act === 'delete') {
-      GP.dialog('Delete this item?', `<p>"<b>${esc(item.title)}</b>" and its uploaded build will be removed from the portal permanently. This cannot be undone.</p>`, [
+      GP.dialog('Delete this resource?', `<p>"<b>${esc(item.title)}</b>" and its uploaded files will be removed from the portal permanently. This cannot be undone.</p>`, [
         { label: 'Cancel' },
         { label: 'Delete', kind: 'danger', onClick: async (close) => {
           try { await api('/api/admin/items/' + item.id, { method: 'DELETE' }); close(); GP.toast('Deleted.'); loadContent(); } catch (ex) { GP.toast(ex.message); }
@@ -127,11 +130,14 @@
   /** Upload / edit dialog. */
   function itemDialog(item) {
     const editing = !!item;
-    const it = item || { type: 'Game', subject: 'Mathematics', grade: 1, visible: true, fit: true, tags: [] };
+    const it = item || { type: 'Book', subject: 'Mathematics', grade: 1, visible: true, fit: true, tags: [] };
+    const SOURCE_NOTE = { pdf: 'PDF file', build: 'Unity WebGL build' };
+    const sourceOf = (t) => (t === 'Book' ? 'pdf' : 'build');
     const knownLesson = it.lessonId && cur.lessons.some((l) => l.id === it.lessonId) ? it.lessonId : (it.unit || it.lesson ? '__custom' : '');
-    const d = GP.dialog(editing ? 'Edit: ' + it.title : 'Upload a new game or interactive', `
+    const d = GP.dialog(editing ? 'Edit: ' + it.title : 'Add a resource', `
+      <div class="field"><span>What is it?</span><div class="type-pick">${GP.TYPES.map((t) => `<label style="--tc:${GP.TYPE_INFO[t].color}">
+        <input type="radio" name="type" value="${t}" ${t === GP.typeOf(it.type) ? 'checked' : ''}><b>${GP.typeIcon(t)}${esc(t)}</b><span>${SOURCE_NOTE[sourceOf(t)]}</span></label>`).join('')}</div></div>
       <div class="form-grid">
-        <label class="field">Type<select class="input" name="type">${types.map((t) => opt(t, t, t === it.type)).join('')}</select></label>
         <label class="field">Subject<select class="input" name="subject">${cur.subjects.map((s) => opt(s.name, s.name, s.name === it.subject)).join('')}</select></label>
         <label class="field">Grade<select class="input" name="grade">${grades().map((g) => opt(g, 'Grade ' + g, g === it.grade)).join('')}</select></label>
         <label class="field">Lesson (from the book)<select class="input" name="lessonId"></select><span class="small faint" id="lesson-hint" style="font-weight:400"></span></label>
@@ -148,11 +154,17 @@
         <label class="field">Tags (comma separated)<input class="input" name="tags" value="${esc((it.tags || []).join(', '))}"></label>
         <label class="field">Cover image (optional)<input class="input" name="thumb" type="file" accept="image/png,image/jpeg,image/webp" style="padding-top:8px"></label>
         <label class="check"><input type="checkbox" name="visible" ${it.visible !== false ? 'checked' : ''}> Visible in the library</label>
-        <label class="check"><input type="checkbox" name="fit" ${it.fit !== false ? 'checked' : ''}> Fit Unity games to the window</label>
+        <label class="check" data-src="build"><input type="checkbox" name="fit" ${it.fit !== false ? 'checked' : ''}> Fit Unity builds to the window</label>
       </div>
-      <div class="dropzone" id="drop">
+      <div class="dropzone" id="drop-pdf" data-src="pdf">
+        <div>${ICONS.bookOpen.replace('<svg', '<svg width="34" height="34"')}</div>
+        <div><b>${editing && it.version ? 'Replace the PDF (optional)' : 'Add the book PDF'}</b><br><span class="small">Readers turn its pages like a real book. One PDF per book or chapter.</span></div>
+        <label class="btn sm">Choose PDF<input type="file" name="pdf" accept=".pdf,application/pdf" hidden></label>
+        <div class="small" id="pdf-summary"></div>
+      </div>
+      <div class="dropzone" id="drop" data-src="build">
         <div>${ICONS.upload.replace('<svg', '<svg width="34" height="34"')}</div>
-        <div><b>${editing ? 'Replace the build (optional)' : 'Add the WebGL build'}</b><br><span class="small">Choose the build folder (the one with index.html and Build), or a .zip of it. Compressed builds (.gz/.br/.unityweb) are fixed automatically.</span></div>
+        <div><b>${editing && it.version ? 'Replace the build (optional)' : 'Add the Unity WebGL build'}</b><br><span class="small">Choose the build folder (the one with index.html and Build), or a .zip of it. Compressed builds (.gz/.br/.unityweb) are fixed automatically.</span></div>
         <div class="row" style="flex-wrap:wrap;justify-content:center">
           <label class="btn sm">Choose folder<input type="file" name="folder" webkitdirectory multiple hidden></label>
           <label class="btn sm">Choose .zip<input type="file" name="zip" accept=".zip,application/zip" hidden></label>
@@ -169,6 +181,26 @@
     ]);
     const f = (n) => d.el.querySelector(`[name="${n}"]`);
     let build = null; // { kind: 'folder'|'zip'|'path', files|file|path }
+    let pdfFile = null;
+    const typeVal = () => d.el.querySelector('[name="type"]:checked').value;
+    function syncSource() {
+      const src = sourceOf(typeVal());
+      d.el.querySelectorAll('[data-src]').forEach((el) => { el.hidden = el.dataset.src !== src; });
+    }
+    d.el.querySelector('.type-pick').addEventListener('change', syncSource);
+    syncSource();
+
+    const pdfSummary = d.el.querySelector('#pdf-summary');
+    const pickPdf = (file) => {
+      if (!file || !/\.pdf$/i.test(file.name)) return GP.toast('Choose a .pdf file.');
+      pdfFile = file;
+      pdfSummary.textContent = `${file.name} · ${GP.bytes(file.size)}`;
+    };
+    f('pdf').addEventListener('change', (e) => pickPdf(e.target.files[0]));
+    const dropPdf = d.el.querySelector('#drop-pdf');
+    ['dragover', 'dragenter'].forEach((ev) => dropPdf.addEventListener(ev, (e) => { e.preventDefault(); dropPdf.classList.add('drag'); }));
+    ['dragleave', 'drop'].forEach((ev) => dropPdf.addEventListener(ev, () => dropPdf.classList.remove('drag')));
+    dropPdf.addEventListener('drop', (e) => { e.preventDefault(); pickPdf(e.dataTransfer.files[0]); });
 
     function refreshLessons() {
       f('lessonId').innerHTML = lessonOptions(f('subject').value, f('grade').value, knownLessonFor());
@@ -186,7 +218,7 @@
       d.el.querySelector('#lesson-hint').textContent = l
         ? `${l.strand ? l.strand + ' · ' : ''}${l.unit === 99 ? 'Grammar' : 'Unit ' + l.unit}: ${l.unitTitle}${l.chapter ? ' · LMS: ' + l.chapter : ''}` : '';
       if (userPicked && l && !f('title').value.trim()) f('title').value = suggestTitle(l);
-      if (userPicked && l) f('title').placeholder = suggestTitle(l) || 'Game title';
+      if (userPicked && l) f('title').placeholder = suggestTitle(l) || 'Title';
     }
     f('subject').addEventListener('change', () => { firstRender = false; refreshLessons(); });
     f('grade').addEventListener('change', () => { firstRender = false; refreshLessons(); });
@@ -231,7 +263,7 @@
       const lessonIdVal = f('lessonId').value;
       const l = cur.lessons.find((x) => x.id === lessonIdVal);
       const base = {
-        type: f('type').value, subject: f('subject').value, grade: +f('grade').value, title: f('title').value.trim() || f('title').placeholder,
+        type: typeVal(), subject: f('subject').value, grade: +f('grade').value, title: f('title').value.trim() || f('title').placeholder,
         description: f('description').value, tags: f('tags').value, visible: f('visible').checked, fit: f('fit').checked,
       };
       if (l) return { ...base, strand: l.strand, unit: l.unit, unitTitle: l.unitTitle, lesson: l.lesson, lessonTitle: l.lessonTitle, chapter: l.chapter };
@@ -248,16 +280,21 @@
     async function save(close, btn) {
       err.hidden = true;
       const m = meta();
-      if (!m.title || m.title === 'Game title') { err.textContent = 'Please give it a title.'; err.hidden = false; return; }
-      if (!editing && !build) { err.textContent = 'Add the build: choose the build folder or a .zip.'; err.hidden = false; return; }
+      const fail = (msg) => { err.textContent = msg; err.hidden = false; };
+      if (!m.title || m.title === 'Title') return fail('Please give it a title.');
+      const src = sourceOf(m.type);
+      const hasFiles = editing && it.version && sourceOf(GP.typeOf(it.type)) === src;
+      if (src === 'pdf' && !pdfFile && !hasFiles) return fail('Choose the PDF for this book.');
+      if (src === 'build' && !build && !hasFiles) return fail('Add the build: choose the build folder or a .zip.');
       btn.disabled = true;
       try {
         let saved = editing ? (await api('/api/admin/items/' + it.id, { method: 'PATCH', body: m })).item : (await api('/api/admin/items', { method: 'POST', body: m })).item;
         const thumb = f('thumb').files[0];
         if (thumb) saved = (await api(`/api/admin/items/${saved.id}/thumbnail`, { method: 'PUT', raw: thumb })).item;
-        if (build) await uploadBuild(saved.id);
+        if (src === 'pdf' && pdfFile) await uploadPdf(saved.id);
+        if (src === 'build' && build) await uploadBuild(saved.id);
         close();
-        GP.toast(editing ? 'Saved.' : 'Uploaded! It is live in the library.');
+        GP.toast(editing ? 'Saved.' : 'Published! It is live in the library.');
         loadContent();
       } catch (ex) {
         err.textContent = ex.message;
@@ -265,6 +302,15 @@
         loadContent();
       }
       btn.disabled = false;
+    }
+
+    async function uploadPdf(id) {
+      const uploadId = Array.from(crypto.getRandomValues(new Uint8Array(10)), (b) => b.toString(16).padStart(2, '0')).join('');
+      await api(`/api/admin/items/${id}/files?upload=${uploadId}&path=book.pdf`, { method: 'PUT', raw: pdfFile,
+        onProgress: (a, t) => setProgress(`Uploading ${pdfFile.name}: ${GP.bytes(a)} of ${GP.bytes(t)}`, a / t * 0.95) });
+      setProgress('Saving the book...', 0.97);
+      await api(`/api/admin/items/${id}/finalize`, { method: 'POST', body: { upload: uploadId } });
+      setProgress('Done', 1);
     }
 
     async function uploadBuild(id) {

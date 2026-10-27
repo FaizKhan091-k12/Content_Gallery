@@ -55,7 +55,9 @@ Forgot the admin password: close the portal, run `node server/reset-admin.js <us
 ---
 
 ## Using the portal
-- **Upload:** Admin panel → Content → *Upload new*. Pick Type, Subject, Grade and the Lesson from the book
+- **Formats:** **Books** are PDFs and open in a page-turning reader (drag a page corner to curl it). **Flashcards,
+  2D/3D Interactivities, Simulations, Games and Animations** are Unity WebGL builds.
+- **Upload:** Admin panel → Content → *Add a resource*. Pick the format, Subject, Grade and the Lesson from the book
   (the title is suggested from the "UCD_Digital Assets → Games" sheet), then choose the WebGL build **folder**
   (the one with `index.html` and `Build`) or a **.zip** of it. Compressed Unity builds (`.gz`, `.br`, `.unityweb`)
   are fixed automatically - the "WebGL auto fix" tool is not needed. Unity's default page is made to fill the

@@ -3,23 +3,27 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Play</title>
+  <title>Open</title>
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..600&family=Inter:wght@400;500;600;700&display=swap">
   <link rel="stylesheet" href="/assets/style.css">
 </head>
 <body>
   <div class="player" id="player">
     <div class="player-bar">
-      <a class="btn sm" id="back" href="/" aria-label="Back to library"></a>
+      <a class="btn sm" id="back" href="/" aria-label="Back to the library"></a>
       <div class="grow" style="min-width:0">
         <div class="t" id="title">Loading...</div>
         <div class="crumb" id="crumb"></div>
       </div>
-      <button class="btn sm" id="reload" title="Restart"></button>
-      <button class="btn sm" id="full" title="Full screen"></button>
+      <button class="btn sm icon" id="reload" title="Restart" hidden></button>
+      <button class="btn sm icon" id="full" title="Full screen"></button>
     </div>
-    <iframe id="frame" title="Game" allow="fullscreen; autoplay; gamepad" allowfullscreen></iframe>
-    <div class="loading" id="loading">Loading game...</div>
+    <div class="stage" id="stage">
+      <div class="loading" id="loading" style="inset:0">Loading...</div>
+    </div>
   </div>
   <script src="/assets/common.js"></script>
   <script src="/assets/play.js"></script>

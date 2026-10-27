@@ -10,7 +10,7 @@ const crypto = require('crypto');
 const { pipeline } = require('stream/promises');
 
 const { JsonStore } = require('./lib/store');
-const { createBlobs } = require('./lib/blobs');
+const { createBlobs, walk } = require('./lib/blobs');
 const { Auth, httpError, publicUser, normalizeUsername } = require('./lib/auth');
 const { loadCurriculum, lessonId } = require('./lib/curriculum');
 const { extractZip, safeRelative } = require('./lib/unzip');
@@ -41,13 +41,16 @@ const store = new JsonStore(blobs);
 const auth = new Auth(store);
 const curriculum = () => loadCurriculum(store, SEED_DIR);
 
-const DEFAULT_SETTINGS = { siteName: 'Game Portal', tagline: 'Games and interactives for every lesson', sessionDays: 14, port: 8642, host: '127.0.0.1' };
+const DEFAULT_SETTINGS = { siteName: 'Game Portal', tagline: 'Books, flashcards, interactivities, simulations and games for every lesson', sessionDays: 14, port: 8642, host: '127.0.0.1' };
 const settings = () => {
   const { lastAdminReset, ...s } = store.get('settings', {}); // internal marker, never sent to browsers
   return { ...DEFAULT_SETTINGS, ...s };
 };
 
-const TYPES = ['Game', '2D Interactivity', '3D Interactivity', 'Simulation', 'Animation', 'Other'];
+// What a resource is. Books are PDFs; everything else is a Unity WebGL (or HTML5) build.
+const TYPES = ['Book', 'Flashcards', '2D Interactivity', '3D Interactivity', 'Simulation', 'Game', 'Animation'];
+const LEGACY_TYPES = { Interactive: '2D Interactivity', Other: '2D Interactivity' };
+const sourceOf = (type) => (type === 'Book' ? 'pdf' : 'build');
 const MAX_FILE = 2 * 1024 ** 3;        // per uploaded file
 const MAX_JSON = 1024 * 1024;
 const MAX_THUMB = 6 * 1024 * 1024;
@@ -61,12 +64,12 @@ const MIME = {
   '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.gif': 'image/gif', '.webp': 'image/webp',
   '.svg': 'image/svg+xml', '.ico': 'image/x-icon', '.mp3': 'audio/mpeg', '.ogg': 'audio/ogg', '.wav': 'audio/wav',
   '.mp4': 'video/mp4', '.webm': 'video/webm', '.woff': 'font/woff', '.woff2': 'font/woff2', '.ttf': 'font/ttf',
-  '.txt': 'text/plain; charset=utf-8', '.xml': 'application/xml', '.symbols': 'application/octet-stream',
+  '.txt': 'text/plain; charset=utf-8', '.xml': 'application/xml', '.symbols': 'application/octet-stream', '.pdf': 'application/pdf',
 };
 const mimeOf = (f) => MIME[path.extname(f).toLowerCase()] || 'application/octet-stream';
 
-const PORTAL_CSP = "default-src 'self'; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; script-src 'self'; " +
-  "frame-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'; frame-ancestors 'self'";
+const PORTAL_CSP = "default-src 'self'; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
+  "font-src 'self' https://fonts.gstatic.com; script-src 'self'; worker-src 'self' blob:; frame-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'; frame-ancestors 'self'";
 
 function baseHeaders(req, extra = {}) {
   const h = {
@@ -217,7 +220,7 @@ function cleanMeta(input, existing = {}) {
   const m = { ...existing };
   const str = (v, n) => String(v ?? '').trim().slice(0, n);
   if (input.title !== undefined) m.title = str(input.title, 120);
-  if (input.type !== undefined) m.type = TYPES.includes(input.type) ? input.type : 'Other';
+  if (input.type !== undefined) m.type = TYPES.includes(input.type) ? input.type : LEGACY_TYPES[input.type] || '2D Interactivity';
   if (input.subject !== undefined) m.subject = str(input.subject, 40);
   if (input.strand !== undefined) m.strand = str(input.strand, 20);
   if (input.grade !== undefined) m.grade = Math.max(0, Math.min(12, parseInt(input.grade, 10) || 0));
@@ -256,6 +259,22 @@ function rmrf(p) {
   fs.rmSync(resolved, { recursive: true, force: true });
 }
 
+/** A book upload is one PDF; it is stored as book.pdf. */
+function preparePdf(stageDir) {
+  const pdfs = walk(stageDir).filter((f) => /\.pdf$/i.test(f));
+  if (pdfs.length !== 1) throw httpError(400, 'Upload exactly one PDF file for a book.');
+  const src = path.join(stageDir, pdfs[0]);
+  const head = Buffer.alloc(5);
+  const fd = fs.openSync(src, 'r');
+  try { fs.readSync(fd, head, 0, 5, 0); } finally { fs.closeSync(fd); }
+  if (head.toString('latin1') !== '%PDF-') throw httpError(400, `"${pdfs[0]}" is not a PDF file.`);
+  const final = path.join(stageDir, 'book.pdf');
+  if (src !== final) fs.renameSync(src, final);
+  for (const f of walk(stageDir)) if (f !== 'book.pdf') fs.rmSync(path.join(stageDir, f), { force: true });
+  const size = fs.statSync(final).size;
+  return { entry: 'book.pdf', isUnity: false, gz: [], size, files: 1, log: [`PDF stored (${(size / 1048576).toFixed(1)} MB)`] };
+}
+
 const gamePrefix = (id, version) => `games/${id}/v${version}`;
 const processing = new Set();
 
@@ -267,7 +286,7 @@ async function finalizeBuild(item, stageDir, user) {
   item.error = null;
   saveItem(item);
   try {
-    const result = await processBuild(stageDir, { fit: item.fit !== false });
+    const result = sourceOf(item.type) === 'pdf' ? preparePdf(stageDir) : await processBuild(stageDir, { fit: item.fit !== false });
     const version = (item.version || 0) + 1;
     await blobs.putDir(stageDir, gamePrefix(item.id, version));
     const oldVersion = item.version;

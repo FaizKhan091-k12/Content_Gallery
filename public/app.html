@@ -5,33 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Library</title>
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..600&family=Inter:wght@400;500;600;700&display=swap">
   <link rel="stylesheet" href="/assets/style.css">
 </head>
 <body>
   <header class="topbar">
-    <button class="btn ghost sm only-mobile" id="toggle-filters" aria-label="Filters"></button>
-    <a class="brandmark" href="/"><img src="/assets/favicon.svg" alt=""><span id="site-name">Game Portal</span></a>
+    <a class="brandmark" href="#/"><img src="/assets/favicon.svg" alt=""><span id="site-name">Library</span></a>
+    <nav class="navlinks" id="nav"></nav>
     <label class="search"><span class="sr-only">Search</span><span id="search-icon"></span>
-      <input class="input" id="q" type="search" placeholder="Search games, lessons, chapters..." autocomplete="off"></label>
-    <div class="grow"></div>
+      <input class="input" id="q" type="search" placeholder="Search lessons, chapters, resources" autocomplete="off"></label>
     <div id="user"></div>
   </header>
-  <div class="layout">
-    <aside class="sidebar" id="sidebar">
-      <h3>Subject</h3>
-      <div class="navlist" id="subjects"></div>
-      <h3>Grade</h3>
-      <div class="chips" id="grades"></div>
-      <h3>Type</h3>
-      <div class="navlist" id="types"></div>
-      <h3>View</h3>
-      <label class="check" style="padding:0 6px"><input type="checkbox" id="show-empty"> Show lessons without content</label>
-    </aside>
-    <main class="main" id="main">
-      <div class="page-head"><div><h1 id="heading">Library</h1><div class="sub" id="subheading"></div></div></div>
-      <div id="content"></div>
-    </main>
-  </div>
+  <nav class="subnav" id="subnav"></nav>
+  <main class="page" id="view" tabindex="-1"></main>
+  <footer class="footer" id="footer"></footer>
   <script src="/assets/common.js"></script>
   <script src="/assets/app.js"></script>
 </body>
