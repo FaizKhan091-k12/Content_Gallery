@@ -11,8 +11,8 @@ No third-party packages: plain Node.js (18+).
 
 Render's free plan has no permanent disk, so games, cover images and accounts are kept in a
 Backblaze B2 bucket (10 GB free, no credit card). The server keeps a copy of each game file on its own disk
-after the first download, so B2's free download allowance goes a long way. The site sleeps after 15 minutes
-without visitors; the first visit after that takes about a minute to wake up.
+after the first download, so B2's free download allowance goes a long way. The server pings itself every 10 minutes
+so Render does not put it to sleep (one always-on free service fits in Render's 750 free hours a month).
 
 ### 1. Backblaze B2 (storage)
 1. Sign up at backblaze.com → **B2 Cloud Storage** (free, no card).
@@ -81,6 +81,7 @@ Forgot the admin password: close the portal, run `node server/reset-admin.js <us
 | `TRUST_PROXY` | `1` behind a hosting proxy (set automatically on Render) |
 | `ADMIN_RESET_USER`, `ADMIN_RESET_PASSWORD` | one-time admin password reset (remove afterwards) |
 | `PORT`, `HOST` | where to listen (Render sets `PORT`) |
+| `KEEP_AWAKE` | `0` stops the 10-minute self-ping that keeps a Render free site from sleeping (on by default on Render) |
 
 ## Security
 - Every page, API call and game file needs a valid login (HttpOnly, SameSite session cookie; Secure on HTTPS).

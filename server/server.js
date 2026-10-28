@@ -743,6 +743,21 @@ const server = http.createServer(async (req, res) => {
 server.requestTimeout = 0;          // big uploads over slow links
 server.headersTimeout = 60000;
 
+/**
+ * Render's free plan stops a site after 15 minutes without visitors, and the next visitor waits about a
+ * minute on a "waking up" screen. Calling our own public address every 10 minutes counts as a visit, so
+ * the site stays ready. One always-on free service fits in Render's 750 free hours a month.
+ * KEEP_AWAKE=0 turns it off; KEEP_AWAKE_URL overrides the address (Render provides RENDER_EXTERNAL_URL).
+ */
+function keepAwake() {
+  const base = ENV.KEEP_AWAKE_URL || ENV.RENDER_EXTERNAL_URL;
+  if (!base || ENV.KEEP_AWAKE === '0') return;
+  const url = base.replace(/\/+$/, '') + '/healthz';
+  const ping = () => fetch(url, { signal: AbortSignal.timeout(30000) }).catch((e) => console.error('keep-awake ping failed:', e.message));
+  setInterval(ping, 10 * 60 * 1000).unref();
+  console.log('Keeping the site awake: pinging ' + url + ' every 10 minutes.');
+}
+
 async function main() {
   // Clean upload folders left by interrupted uploads (older than a day).
   for (const d of fs.readdirSync(STAGING_DIR)) {
@@ -790,6 +805,7 @@ async function main() {
         ? 'First run: open /setup in a browser and enter the SETUP_CODE to create the admin account.'
         : `First run: open http://localhost:${port}/setup on this PC to create the admin account.`);
     }
+    keepAwake();
   });
 }
 
